@@ -22,7 +22,7 @@
                 <input type="password" required placeholder="password" name="password">
             </label><br><br>
             <input class="button" type="submit" value="Enter">
-
+            <a href="<c:url value="/SignUp"/>">SignUp</a>
         </form>
     </div>
 </body>

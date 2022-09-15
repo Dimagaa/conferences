@@ -1,5 +1,6 @@
 package com.webapp.conferences.controllers.filters;
 
+import com.webapp.conferences.dao.DAOException;
 import com.webapp.conferences.model.User;
 import com.webapp.conferences.services.UserService;
 
@@ -10,11 +11,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class AuthFilter implements Filter {
-
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        Filter.super.init(filterConfig);
-    }
 
     @Override
     @SuppressWarnings({"OptionalGetWithoutIsPresent"})
@@ -28,18 +24,26 @@ public class AuthFilter implements Filter {
 
         final UserService userService = UserService.getInstance();
 
+        final String path = req.getServletPath();
+
         final HttpSession session = req.getSession();
 
         if(session.getAttribute("login") != null && session.getAttribute("password") != null) {
             User.ROLE role = (User.ROLE) session.getAttribute("role");
             moveToMenu(req, res, role);
-        } else if(userService.validation(login, password)) {
-            req.getSession().setAttribute("login", login);
-            req.getSession().setAttribute("password", password);
-            req.getSession().setAttribute("role", userService.getUser(login).get().getRole());
-            moveToMenu(req, res, userService.getUser(login).get().getRole());
         } else {
-            moveToMenu(req, res, User.ROLE.UNKNOWN);
+            try {
+                if(userService.validation(login, password)) {
+                    req.getSession().setAttribute("login", login);
+                    req.getSession().setAttribute("password", password);
+                    req.getSession().setAttribute("role", userService.getUser(login).get().getRole());
+                    moveToMenu(req, res, userService.getUser(login).get().getRole());
+                } else {
+                    req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, res);
+                }
+            } catch (DAOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -54,9 +58,6 @@ public class AuthFilter implements Filter {
             case SPEAKER:
             case MODERATOR:
                 req.getRequestDispatcher("/WEB-INF/view/index.jsp").forward(req, res);
-                break;
-            default:
-                req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, res);
                 break;
         }
     }

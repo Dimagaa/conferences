@@ -4,6 +4,8 @@ public class User {
     private long id;
     private String login;
     private String password;
+    private String firstName;
+    private String lastName;
     private ROLE role;
 
     public User(long id, String login, String password, ROLE role) {
@@ -11,6 +13,22 @@ public class User {
         this.login = login;
         this.password = password;
         this.role = role;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public long getId() {
@@ -46,7 +64,12 @@ public class User {
     }
 
     public enum ROLE {
-        MODERATOR, SPEAKER, USER, UNKNOWN
+        /**
+         * USER == 0;
+         * SPEAKER == 1;
+         * MODERATOR == 2;
+         */
+        USER, SPEAKER, MODERATOR
     }
 }
 
