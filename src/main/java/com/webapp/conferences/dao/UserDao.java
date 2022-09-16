@@ -7,12 +7,12 @@ import java.util.Optional;
 
 public interface UserDao {
 
-    Optional<User> getUserByLogin(String login) throws DAOException;
-    List<User> findAll() throws  DAOException;
-    Optional<User> findById(long id) throws DAOException;
-    void add(User user) throws DAOException;
-    void update(User user) throws DAOException;
-    void delete(long userId) throws DAOException;
+    Optional<User> getUserByLogin(String login);
+    List<User> findAll() throws Exception;
+    Optional<User> findById(long id) throws Exception;
+    void add(User user) throws Exception;
+    void update(User user) throws Exception;
+    void delete(long userId) throws Exception;
 
 
 

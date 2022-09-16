@@ -7,16 +7,16 @@ import java.util.List;
 
 public abstract class GenericDao<T> {
 
-    protected List<T> findAll(String query) throws DAOException {
+    protected List<T> findAll(String query) throws Exception {
         throw new UnsupportedOperationException();
     }
 
     @SafeVarargs
-    protected final <V> List<T> findByFields(String query, V... values) throws DAOException {
+    protected final <V> List<T> findByFields(String query, V... values) throws Exception {
         throw new UnsupportedOperationException();
     }
 
-    protected int add(String query, T item) throws  DAOException {
+    protected int add(String query, T item) throws  Exception {
         throw new UnsupportedOperationException();
     }
 
@@ -24,11 +24,11 @@ public abstract class GenericDao<T> {
         throw  new UnsupportedOperationException();
     }
 
-    protected <V> void deleteByField(String query, V value) throws DAOException {
+    protected <V> void deleteByField(String query, V value) throws Exception {
         throw new UnsupportedOperationException();
     }
 
-    private void closeResources(PreparedStatement statement, ResultSet rs) throws DAOException{
+    private void closeResources(PreparedStatement statement, ResultSet rs) throws Exception{
         try {
             if (statement != null) {
                 statement.close();
@@ -37,12 +37,12 @@ public abstract class GenericDao<T> {
                 rs.close();
             }
         } catch (SQLException e) {
-            throw new DAOException("Can't close resources", e);
+            throw new SQLException("Can't close resources", e);
         }
     }
 
-    protected abstract T mapFromDataSource(ResultSet rs) throws DAOException;
+    protected abstract T mapFromDataSource(ResultSet rs) throws Exception;
 
-    protected abstract void mapToDataSource(PreparedStatement statement, T obj) throws DAOException;
+    protected abstract void mapToDataSource(PreparedStatement statement, T obj) throws Exception;
 
 }

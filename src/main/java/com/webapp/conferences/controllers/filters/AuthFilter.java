@@ -1,6 +1,5 @@
 package com.webapp.conferences.controllers.filters;
 
-import com.webapp.conferences.dao.DAOException;
 import com.webapp.conferences.model.User;
 import com.webapp.conferences.services.UserService;
 
@@ -41,7 +40,7 @@ public class AuthFilter implements Filter {
                 } else {
                     req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, res);
                 }
-            } catch (DAOException e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }

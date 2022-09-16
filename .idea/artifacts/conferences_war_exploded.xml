@@ -14,11 +14,12 @@
           <element id="module-output" name="conferences" />
         </element>
         <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:8.0.30" />
+          <element id="library" level="project" name="Maven: com.google.protobuf:protobuf-java:3.19.4" />
           <element id="library" level="project" name="Maven: jstl:jstl:1.2" />
           <element id="library" level="project" name="Maven: org.mindrot:jbcrypt:0.4" />
-          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:2.0.0" />
-          <element id="library" level="project" name="Maven: org.slf4j:slf4j-reload4j:2.0.0" />
-          <element id="library" level="project" name="Maven: ch.qos.reload4j:reload4j:1.2.19" />
+          <element id="library" level="project" name="Maven: org.apache.logging.log4j:log4j-api:2.18.0" />
+          <element id="library" level="project" name="Maven: org.apache.logging.log4j:log4j-core:2.18.0" />
         </element>
       </element>
       <element id="directory" name="META-INF">

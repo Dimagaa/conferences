@@ -1,6 +1,5 @@
 package com.webapp.conferences.dao.impl;
 
-import com.webapp.conferences.dao.DAOException;
 import com.webapp.conferences.dao.UserDao;
 import com.webapp.conferences.model.User;
 
@@ -23,27 +22,27 @@ public class UserDaoTest implements UserDao {
     }
 
     @Override
-    public List<User> findAll() throws DAOException {
+    public List<User> findAll() {
         return null;
     }
 
     @Override
-    public Optional<User> findById(long id) throws DAOException {
+    public Optional<User> findById(long id) {
         return Optional.empty();
     }
 
     @Override
-    public void add(User user) throws DAOException {
+    public void add(User user) {
 
     }
 
     @Override
-    public void update(User user) throws DAOException {
+    public void update(User user) {
 
     }
 
     @Override
-    public void delete(long userId) throws DAOException {
+    public void delete(long userId) throws Exception {
 
     }
 

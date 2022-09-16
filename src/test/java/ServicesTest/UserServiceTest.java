@@ -1,6 +1,5 @@
 package ServicesTest;
 
-import com.webapp.conferences.dao.DAOException;
 import com.webapp.conferences.model.User;
 import com.webapp.conferences.services.UserService;
 
@@ -41,7 +40,7 @@ public class UserServiceTest {
             "bon, bob",
             "brian, brian"
     })
-    public void whenLoginAndPasswordIsCorrect(String login, String password) throws DAOException {
+    public void whenLoginAndPasswordIsCorrect(String login, String password) {
         users = UserService.getInstance();
         users.addUser(login, password, User.ROLE.SPEAKER);
         assertTrue(users.validation(login, password));
@@ -53,7 +52,7 @@ public class UserServiceTest {
             "test2, test2",
             "test3, brian"
     })
-    public void whenLoginAndPasswordIsIncorrect(String login, String password) throws DAOException {
+    public void whenLoginAndPasswordIsIncorrect(String login, String password) {
         init();
         assertFalse(users.validation(login, password));
     }
@@ -63,20 +62,20 @@ public class UserServiceTest {
             "test5, test2",
             "test6, brian"
     })
-    public void whenUserNotExistValidationTest(String login, String password) throws DAOException {
+    public void whenUserNotExistValidationTest(String login, String password) {
         init();
         assertFalse(users.validation(login, password));
     }
     @ParameterizedTest
     @NullAndEmptySource
-    public void whenLoginIsEmptyAndNullValidation(String login) throws DAOException {
+    public void whenLoginIsEmptyAndNullValidation(String login)  {
         init();
         assertFalse(users.validation(login, "test"));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"TEST1", "TeSt2", "tEst3"})
-    public void whenUseDifferentLetterCaseLogin(String login) throws DAOException {
+    public void whenUseDifferentLetterCaseLogin(String login) {
         assertTrue(users.validation(login, PASSWORD));
     }
 

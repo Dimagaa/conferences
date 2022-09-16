@@ -1,6 +1,5 @@
 package com.webapp.conferences.controllers.servlets;
 
-import com.webapp.conferences.dao.DAOException;
 import com.webapp.conferences.model.User;
 import com.webapp.conferences.services.UserService;
 
@@ -8,6 +7,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.sql.SQLException;
 
 
 @WebServlet(name = "SignUpServlet", value = "/SignUp")
@@ -38,7 +38,7 @@ public class SignUpServlet extends HttpServlet {
                 User user = users.addUser(login, password);
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
-            } catch (DAOException e) {
+            } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -46,8 +46,8 @@ public class SignUpServlet extends HttpServlet {
         request.getSession().setAttribute("login", login);
         request.getSession().setAttribute("password", password);
         try {
-            request.getSession().setAttribute("role", users.getUser(login).orElseThrow(DAOException::new).getRole());
-        } catch (DAOException e) {
+            request.getSession().setAttribute("role", users.getUser(login).orElseThrow(SQLException::new).getRole());
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 

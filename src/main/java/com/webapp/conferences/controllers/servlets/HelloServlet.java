@@ -1,8 +1,8 @@
 package com.webapp.conferences.controllers.servlets;
 
-import com.webapp.conferences.dao.DAOException;
-import com.webapp.conferences.model.User;
 import com.webapp.conferences.services.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -10,19 +10,17 @@ import javax.servlet.annotation.*;
 @WebServlet(name = "helloServlet", value = "/hello-servlet")
 public class HelloServlet extends HttpServlet {
 
+    private static final Logger logger = LogManager.getLogger("test");
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
+
         HttpSession session = request.getSession();
+
+        logger.debug("Session is open");
+        System.out.println("Hello Servlet1");
+
         String login = (String) session.getAttribute("login");
 
         UserService userService = UserService.getInstance();
-
-        try {
-            User user = userService.getUser(login).orElseThrow(DAOException::new);
-
-        } catch (DAOException e) {
-            throw new RuntimeException(e);
-        }
-
     }
 
 }
