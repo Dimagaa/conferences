@@ -1,6 +1,7 @@
 package com.webapp.conferences.dao;
 
 import com.webapp.conferences.dao.impl.mysql.MySQLDaoFactory;
+import com.webapp.conferences.exceptions.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,11 +14,10 @@ public abstract class DaoFactory {
         if(dbName.equalsIgnoreCase("MySQL")) {
             return MySQLDaoFactory.getInstance();
         }
-        logger.error("Can't find specified name of data base DaoFactory");
         throw new IllegalArgumentException("Can't find specified data bases name  DaoFactory");
     }
 
-    public abstract UserDao getUserDao();
+    public abstract UserDao getUserDao() throws DaoException;
     public abstract EventDao getEventDao();
     public abstract ReportDao getReportDao();
 }

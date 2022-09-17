@@ -4,6 +4,7 @@ import com.webapp.conferences.dao.DaoFactory;
 import com.webapp.conferences.dao.EventDao;
 import com.webapp.conferences.dao.ReportDao;
 import com.webapp.conferences.dao.UserDao;
+import com.webapp.conferences.exceptions.DaoException;
 
 public class MySQLDaoFactory extends DaoFactory {
 
@@ -27,11 +28,11 @@ public class MySQLDaoFactory extends DaoFactory {
 
     @Override
     public EventDao getEventDao() {
-        return null;
+        return new MySQLEventDao();
     }
 
     @Override
     public ReportDao getReportDao() {
-        return null;
+        return new MySQLReportDao();
     }
 }

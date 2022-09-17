@@ -1,5 +1,7 @@
 package com.webapp.conferences.dao.impl.mysql;
 
+import com.webapp.conferences.dao.ConnectionManager;
+import com.webapp.conferences.exceptions.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -10,48 +12,91 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class MySQLConnectionManager {
+public class MySQLConnectionManager implements ConnectionManager {
 
-    private static MySQLConnectionManager instance;
+    private static volatile MySQLConnectionManager instance;
     private DataSource dataSource;
     private final static Logger logger = LogManager.getLogger("Global");
 
     private MySQLConnectionManager() {
     }
 
-    public synchronized static MySQLConnectionManager getInstance() {
+    public static MySQLConnectionManager getInstance() {
         if(instance == null) {
-            instance = new MySQLConnectionManager();
+            synchronized (MySQLConnectionManager.class) {
+                if(instance == null) {
+                    instance = new MySQLConnectionManager();
+                }
+            }
         }
         return instance;
     }
 
-    public Connection getConnection() throws SQLException {
+    public Connection getConnection() throws DaoException {
         if(dataSource == null) {
             initDataSource();
         }
         try {
             Connection connection = dataSource.getConnection();
-            logger.info("Connection is created");
+            logger.trace("Connection ");
             return connection;
         } catch (SQLException e) {
-            logger.error("Can't get connection");
-            throw new SQLException(e);
+            throw new DaoException(e);
         }
 
     }
 
+    @Override
+    public Connection getTransaction() throws DaoException {
+        try {
+            Connection connection = getConnection();
+            logger.trace("Start transaction");
+            connection.setAutoCommit(false);
+            return connection;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
 
-    private synchronized void initDataSource() throws SQLException {
+    @Override
+    public void commit(Connection connection) throws DaoException {
+        try {
+            connection.commit();
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public void rollback(Connection connection) throws DaoException {
+        try {
+            logger.trace("Rollback transaction");
+            connection.rollback();
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public void close(Connection connection) throws DaoException {
+        try {
+            connection.setAutoCommit(true);
+            connection.close();
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+    private synchronized void initDataSource() throws DaoException {
         if(dataSource == null) {
             try {
                 Context context = new InitialContext();
                 dataSource = (DataSource) context.lookup("java:comp/env/jdbc/mysql");
                 logger.trace("DataSource was initialized successful");
             } catch (NamingException e) {
-                logger.error("DataSource initialization error");
-                throw new SQLException(e);
+                throw new DaoException("Data Source initialization exception, check context.xml", e);
             }
         }
     }
+
+
 }

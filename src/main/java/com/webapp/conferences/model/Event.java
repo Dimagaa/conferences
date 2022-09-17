@@ -2,6 +2,7 @@ package com.webapp.conferences.model;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Objects;
 
 public class Event {
     private long id;
@@ -59,5 +60,33 @@ public class Event {
 
     public void setLimitEvents(int limitEvents) {
         this.limitEvents = limitEvents;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Event event = (Event) o;
+
+        if (id != event.id) return false;
+        if (limitEvents != event.limitEvents) return false;
+        if (!name.equals(event.name)) return false;
+        if (!startTime.equals(event.startTime)) return false;
+        if (!endTime.equals(event.endTime)) return false;
+        if (!place.equals(event.place)) return false;
+        return Objects.equals(reports, event.reports);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + name.hashCode();
+        result = 31 * result + startTime.hashCode();
+        result = 31 * result + endTime.hashCode();
+        result = 31 * result + place.hashCode();
+        result = 31 * result + (reports != null ? reports.hashCode() : 0);
+        result = 31 * result + limitEvents;
+        return result;
     }
 }

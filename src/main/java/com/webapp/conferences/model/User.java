@@ -1,5 +1,7 @@
 package com.webapp.conferences.model;
 
+import java.util.Objects;
+
 public class User {
     private long id;
     private String login;
@@ -8,12 +10,7 @@ public class User {
     private String lastName;
     private ROLE role;
 
-    public User(long id, String login, String password, ROLE role) {
-        this.id = id;
-        this.login = login;
-        this.password = password;
-        this.role = role;
-    }
+
 
     public String getFirstName() {
         return firstName;
@@ -63,13 +60,23 @@ public class User {
         this.role = role;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id && login.equals(user.login) && password.equals(user.password) && firstName.equals(user.firstName) && lastName.equals(user.lastName) && role == user.role;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, login, password, firstName, lastName, role);
+    }
+
     public enum ROLE {
-        /**
-         * USER == 0;
-         * SPEAKER == 1;
-         * MODERATOR == 2;
-         */
-        USER, SPEAKER, MODERATOR
+        USER,
+        SPEAKER,
+        MODERATOR
     }
 }
 

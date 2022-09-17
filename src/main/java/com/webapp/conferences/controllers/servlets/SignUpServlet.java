@@ -1,5 +1,6 @@
 package com.webapp.conferences.controllers.servlets;
 
+import com.webapp.conferences.exceptions.DaoException;
 import com.webapp.conferences.model.User;
 import com.webapp.conferences.services.UserService;
 
@@ -7,7 +8,6 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
-import java.sql.SQLException;
 
 
 @WebServlet(name = "SignUpServlet", value = "/SignUp")
@@ -18,7 +18,10 @@ public class SignUpServlet extends HttpServlet {
     private final String LAST_NAME = "lastName";
     private final String PASSWORD1 = "password";
     private final String PASSWORD2 = "confirmPassword";
-    private final UserService users = UserService.getInstance();
+    private final UserService users = new UserService("mysql");
+
+    public SignUpServlet() throws DaoException {
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -33,12 +36,10 @@ public class SignUpServlet extends HttpServlet {
         final String password = request.getParameter(PASSWORD1);
         final String confirmPassword = request.getParameter(PASSWORD2);
 
-        if(password.equals(confirmPassword) && !users.isExistsUser(login)) {
+        if(password.equals(confirmPassword)) {
             try {
-                User user = users.addUser(login, password);
-                user.setFirstName(firstName);
-                user.setLastName(lastName);
-            } catch (SQLException e) {
+                users.addUser(login, password, firstName, lastName, User.ROLE.USER);
+            } catch (DaoException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -46,11 +47,10 @@ public class SignUpServlet extends HttpServlet {
         request.getSession().setAttribute("login", login);
         request.getSession().setAttribute("password", password);
         try {
-            request.getSession().setAttribute("role", users.getUser(login).orElseThrow(SQLException::new).getRole());
-        } catch (SQLException e) {
+            request.getSession().setAttribute("role", users.getUser(login).get());
+        } catch (DaoException e) {
             throw new RuntimeException(e);
         }
-
     }
 
 }

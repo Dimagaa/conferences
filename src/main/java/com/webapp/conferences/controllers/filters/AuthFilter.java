@@ -21,17 +21,16 @@ public class AuthFilter implements Filter {
         final String login = req.getParameter("login");
         final String password = req.getParameter("password");
 
-        final UserService userService = UserService.getInstance();
-
-        final String path = req.getServletPath();
-
+        //final String path = req.getServletPath();
         final HttpSession session = req.getSession();
+
 
         if(session.getAttribute("login") != null && session.getAttribute("password") != null) {
             User.ROLE role = (User.ROLE) session.getAttribute("role");
             moveToMenu(req, res, role);
         } else {
             try {
+                UserService userService = new UserService("mysql");
                 if(userService.validation(login, password)) {
                     req.getSession().setAttribute("login", login);
                     req.getSession().setAttribute("password", password);

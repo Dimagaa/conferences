@@ -1,5 +1,6 @@
 package com.webapp.conferences.controllers.servlets;
 
+import com.webapp.conferences.exceptions.DaoException;
 import com.webapp.conferences.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,7 +21,11 @@ public class HelloServlet extends HttpServlet {
 
         String login = (String) session.getAttribute("login");
 
-        UserService userService = UserService.getInstance();
+        try {
+            UserService userService = new UserService("mysql");
+        } catch (DaoException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

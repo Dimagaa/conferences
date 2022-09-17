@@ -2,10 +2,10 @@ package com.webapp.conferences.services;
 
 import com.webapp.conferences.dao.DaoFactory;
 import com.webapp.conferences.dao.UserDao;
+import com.webapp.conferences.exceptions.DaoException;
 import com.webapp.conferences.model.User;
 
-import java.sql.SQLException;
-import java.util.List;
+
 import java.util.Optional;
 
 import static java.util.Objects.nonNull;
@@ -19,22 +19,10 @@ import static org.mindrot.jbcrypt.BCrypt.*;
  */
 
 public class UserService {
-    private UserDao userDao;
-    private static UserService instance;
+    private final UserDao userDao;
 
-    private UserService() {
-        try {
-            DaoFactory daoFactory = DaoFactory.getDaoFactory("MySql");
-            userDao = daoFactory.getUserDao();
-        } catch (IllegalArgumentException e) {
-             e.printStackTrace();
-        }
-    }
-    public static synchronized UserService getInstance() {
-        if(instance == null) {
-            instance = new UserService();
-        }
-        return instance;
+    public UserService(String db) throws DaoException {
+        this.userDao = DaoFactory.getDaoFactory(db).getUserDao();
     }
 
     /**
@@ -44,7 +32,7 @@ public class UserService {
      * @param password - clear text password from view layer
      * @return {@code true} if user with specified parameters is exists
      */
-    public boolean validation(String login, String password) {
+    public boolean validation(String login, String password) throws DaoException {
         if(!(nonNull(login) && nonNull(password))) {
             return false;
         }
@@ -53,27 +41,19 @@ public class UserService {
         return optional.map(user -> checkpw(password, user.getPassword())).orElse(false);
     }
 
-    public boolean addUser(String login, String password, User.ROLE role) {
-        String hash = hashpw(password, gensalt());
-        System.out.println(hash);
-        System.out.println(hash.length());
-
-        return userDao.addUser(new User(0, login.toLowerCase(), hash, role));
-    }
-    public User addUser(String login, String password) throws SQLException {
-        userDao.addUser(login, hashpw(password, gensalt()));
-        return userDao.getUserByLogin(login).orElseThrow(SQLException::new);
-    }
-    public boolean isExistsUser(String login) {
-        return userDao.isExistsUser(login);
+    public boolean addUser(String login, String password, String firstN, String lastN, User.ROLE role) throws DaoException {
+        User user = new User();
+        user.setLogin(login);
+        user.setPassword(hashpw(password, gensalt()));
+        user.setFirstName(firstN);
+        user.setLastName(lastN);
+        user.setRole(role);
+        return userDao.add(user) > 0;
     }
 
-
-    public Optional<User> getUser(String login) {
-        return  userDao.getUserByLogin(login);
+    public Optional<User> getUser(String login) throws DaoException {
+        return userDao.getUserByLogin(login);
     }
 
-    public List<User> findAll() throws Exception {
-        return userDao.findAll();
-    }
+
 }
