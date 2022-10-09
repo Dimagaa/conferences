@@ -1,0 +1,58 @@
+.toggleEye {
+    color: darkgray;
+    text-shadow: 1px 1px 1px lightgray;
+    font-size: 1.5em;
+}
+.offer-button {
+    color: #0d6efd;
+    text-shadow: 1px 1px 1px lightgray;
+    font-size: 1.5em;
+}
+.form-control:focus {
+    color: #212529;
+    background-color: #fff;
+    border-color: rgba(209, 99, 218, 0.68);
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(209, 99, 218, 0.32);
+}
+
+.form-select:focus {
+    color: #212529;
+    background-color: #fff;
+    border-color: rgba(209, 99, 218, 0.68);
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(209, 99, 218, 0.32);
+}
+.navbar-user {
+    padding: var(--bs-navbar-toggler-padding-y) var(--bs-navbar-toggler-padding-x);
+    font-size: var(--bs-navbar-toggler-font-size);
+    line-height: 1.5;
+    color: var(--bs-navbar-color);
+    background-color: transparent;
+    border: var(--bs-border-width) solid var(--bs-navbar-toggler-border-color);
+    border-radius: var(--bs-navbar-toggler-border-radius);
+    transition: var(--bs-navbar-toggler-transition);
+}
+.bg-body-dark {
+    height: 100%;
+    margin: 0;
+    background: #212529 linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0)) no-repeat fixed;
+}
+
+.event-scroll {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+.form-floating > .form-control,
+.form-floating > .form-control-plaintext,
+.form-floating > .form-select {
+    height: 4.3rem;
+    line-height: 1.25;
+}
+
+.validation {
+
+}
+.needs-validation {
+
+}

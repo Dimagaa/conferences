@@ -1,29 +1,70 @@
 <%--
   User: Dmytro Martyshchuk
-  Date: 10/09/2022
+  Date: 11/09/2022
   E-mail: Di.mart.ap@gmail.com
 --%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     <title>Login</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
-    <div class="form">
 
-        <h1> Login </h1>
-        <form method="post" action="">
+<section class="vh-100">
+    <div class="container h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
 
-            <label>
-                <input type="text" required placeholder="login" name="login">
-            </label><br>
-            <label>
-                <input type="password" required placeholder="password" name="password">
-            </label><br><br>
-            <input class="button" type="submit" value="Enter">
-            <a href="<c:url value="/SignUp"/>">SignUp</a>
-        </form>
+                <div class="card bg-dark bg-gradient text-white shadow-lg" style="border-radius: 2rem">
+                    <div class="cart-body p-5 text-center">
+                        <h2 class="fw-bold bb-2 text-uppercase">Login</h2>
+                        <p class="text-white-50 mb-5 fs-5">Please enter your login and password!</p>
+                        <form class="needs-validation log" action="${pageContext.request.contextPath}/login" method="post" button-target="login-btn" novalidate>
+                            <div class="input-group col-12 mb-4">
+                                <input type="email" name="login" class="form-control form-control-lg validation" for="login-btn"
+                                       id="typeEmailX" placeholder="Email">
+                                <label class="visually-hidden" for="typeEmailX">Email address</label>
+                                <div class="invalid-feedback">You have entered an invalid email</div>
+                            </div>
+
+                            <div class="col-12 mb-4">
+                                <input type="password" name="password" class="form-control form-control-lg light-validation validation"
+                                       for="login-btn" id="typePasswordX" placeholder="Password">
+                                <label class="visually-hidden" for="typePasswordX">Password</label>
+                                <div class="invalid-feedback">This field can't be empty</div>
+                            </div>
+
+                            <p class="small mb-5 pb-lg-2"><a class="text-white-50 fs-6" href="#">Forgot
+                                password?</a></p>
+
+                            <button class="btn btn-outline-light btn-lg px-5" id="login-btn" type="submit" disabled>
+                                Login
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="text-white text-center mb-5">
+                        <p class="mb-0 fs-6">Don't have an account? <a href="${pageContext.request.contextPath}/signup" class="text-white-50 fw-bold">Sign
+                            Up</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+        crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/scripts.js"></script>
 </body>
 </html>

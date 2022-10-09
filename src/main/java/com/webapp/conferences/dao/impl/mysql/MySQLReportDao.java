@@ -52,7 +52,7 @@ public class MySQLReportDao extends GenericDao<Report> implements ReportDao {
     @Override
     public boolean update(Report report) throws DaoException {
         logger.trace("Updating report");
-        return updateByField("UPDATE reports SET topic=? WHERE id=?", report, report.getId(), 2);
+        return updateByField("UPDATE reports SET event_id=?, user_id=?, topic=? WHERE id=?", report, report.getId(), 4);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class MySQLReportDao extends GenericDao<Report> implements ReportDao {
         Report report = new Report();
         report.setId(rs.getLong("id"));
         report.setEventId(rs.getLong("event_id"));
-        report.setSpeakerId(rs.getLong("speaker_id"));
+        report.setSpeakerId(rs.getLong("user_id"));
         report.setTopic(rs.getString("topic"));
         return report;
     }

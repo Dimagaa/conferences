@@ -1,6 +1,8 @@
 package com.webapp.conferences.model;
 
-public class Report {
+import java.io.Serializable;
+
+public class Report implements Serializable {
     private long id;
     private String topic;
     private long eventId;
@@ -38,6 +40,25 @@ public class Report {
         this.speakerId = speakerId;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        Report report = (Report) o;
 
+        if (id != report.id) return false;
+        if (eventId != report.eventId) return false;
+        if (speakerId != report.speakerId) return false;
+        return topic.equals(report.topic);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + topic.hashCode();
+        result = 31 * result + (int) (eventId ^ (eventId >>> 32));
+        result = 31 * result + (int) (speakerId ^ (speakerId >>> 32));
+        return result;
+    }
 }

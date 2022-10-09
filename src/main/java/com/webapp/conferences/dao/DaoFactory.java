@@ -8,10 +8,11 @@ import org.apache.logging.log4j.Logger;
 
 public abstract class DaoFactory {
 
+    public static final String MY_SQL = "mysql";
     private static final Logger logger = LogManager.getLogger("Global");
 
     public static DaoFactory getDaoFactory(String dbName) {
-        if(dbName.equalsIgnoreCase("MySQL")) {
+        if(dbName.equalsIgnoreCase(MY_SQL)) {
             return MySQLDaoFactory.getInstance();
         }
         throw new IllegalArgumentException("Can't find specified data bases name  DaoFactory");

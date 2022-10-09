@@ -1,17 +1,16 @@
 package com.webapp.conferences.model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 
-public class Event {
+public class Event implements Serializable {
     private long id;
     private String name;
     private Timestamp startTime;
     private Timestamp endTime;
     private String place;
-
-    private List<Report> reports;
     private int limitEvents;
 
     public long getId() {
@@ -74,8 +73,7 @@ public class Event {
         if (!name.equals(event.name)) return false;
         if (!startTime.equals(event.startTime)) return false;
         if (!endTime.equals(event.endTime)) return false;
-        if (!place.equals(event.place)) return false;
-        return Objects.equals(reports, event.reports);
+        return place.equals(event.place);
     }
 
     @Override
@@ -85,7 +83,6 @@ public class Event {
         result = 31 * result + startTime.hashCode();
         result = 31 * result + endTime.hashCode();
         result = 31 * result + place.hashCode();
-        result = 31 * result + (reports != null ? reports.hashCode() : 0);
         result = 31 * result + limitEvents;
         return result;
     }

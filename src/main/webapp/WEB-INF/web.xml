@@ -3,23 +3,58 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
-    
-    <!--filter check exist session for sign in-->
-    <filter>
-        <filter-name>AuthFilter</filter-name>
-        <filter-class>com.webapp.conferences.controllers.filters.AuthFilter</filter-class>
-    </filter>
 
-    <filter-mapping>
-        <filter-name>AuthFilter</filter-name>
+    <!-- Servlet mapping -->
+    <servlet>
+        <servlet-name>FrontController</servlet-name>
+        <servlet-class>com.webapp.conferences.controllers.servlets.FrontController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FrontController</servlet-name>
+        <url-pattern>/signup</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FrontController</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FrontController</servlet-name>
+        <url-pattern>/events</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FrontController</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FrontController</servlet-name>
         <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    <!-- Authentication filter -->
+    <filter>
+        <filter-name>Auth Filter</filter-name>
+        <filter-class>com.webapp.conferences.controllers.filters.AuthFilter</filter-class>
+        <init-param>
+            <param-name>excludedUrls</param-name>
+            <!-- Comma separated of excluded urls-->
+            <param-value>/login,/signup</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>Auth Filter</filter-name>
+        <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <!-- -->
+    <!-- Credential for Data Base connection -->
     <resource-ref>
         <description>MySQL DB Connection</description>
         <res-ref-name>jdbc/mysql</res-ref-name>
         <res-type>javax.sql.DataSource</res-type>
         <res-auth>Container</res-auth>
     </resource-ref>
+
+    <!-- Date Base name -->
+    <context-param>
+        <param-name>db_name</param-name>
+        <param-value>mysql</param-value>
+    </context-param>
 </web-app>

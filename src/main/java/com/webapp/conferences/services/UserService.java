@@ -1,12 +1,13 @@
 package com.webapp.conferences.services;
 
-import com.webapp.conferences.dao.DaoFactory;
 import com.webapp.conferences.dao.UserDao;
 import com.webapp.conferences.exceptions.DaoException;
 import com.webapp.conferences.model.User;
 
 
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.util.Objects.nonNull;
 import static org.mindrot.jbcrypt.BCrypt.*;
@@ -21,8 +22,22 @@ import static org.mindrot.jbcrypt.BCrypt.*;
 public class UserService {
     private final UserDao userDao;
 
-    public UserService(String db) throws DaoException {
-        this.userDao = DaoFactory.getDaoFactory(db).getUserDao();
+    public UserService(UserDao userDao) throws DaoException {
+        this.userDao = userDao;
+    }
+
+    public User createUser(String email, String firstName, String lastName, String password) throws DaoException {
+        if(!(isValidEmail(email) && isValidPassword(password))) {
+            throw new IllegalArgumentException("email or password is invalid!");
+        }
+        final User user = new User();
+        user.setLogin(email);
+        user.setPassword(hashpw(password, gensalt()));
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setRole(User.ROLE.USER);
+        user.setId(userDao.add(user));
+        return user;
     }
 
     /**
@@ -32,22 +47,16 @@ public class UserService {
      * @param password - clear text password from view layer
      * @return {@code true} if user with specified parameters is exists
      */
-    public boolean validation(String login, String password) throws DaoException {
+    public boolean validate(String login, String password) throws DaoException {
         if(!(nonNull(login) && nonNull(password))) {
             return false;
         }
 
-        Optional<User> optional = userDao.getUserByLogin(login.toLowerCase());
+        Optional<User> optional = userDao.getUserByLogin(login);
         return optional.map(user -> checkpw(password, user.getPassword())).orElse(false);
     }
 
-    public boolean addUser(String login, String password, String firstN, String lastN, User.ROLE role) throws DaoException {
-        User user = new User();
-        user.setLogin(login);
-        user.setPassword(hashpw(password, gensalt()));
-        user.setFirstName(firstN);
-        user.setLastName(lastN);
-        user.setRole(role);
+    public boolean addUser(User user) throws DaoException {
         return userDao.add(user) > 0;
     }
 
@@ -55,5 +64,17 @@ public class UserService {
         return userDao.getUserByLogin(login);
     }
 
+    private boolean isValidEmail(String email) {
+        final String regex = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+        final Pattern pattern = Pattern.compile(regex);
+        final Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
 
+    private boolean isValidPassword(String password) {
+        final String regex = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
+        final Pattern pattern = Pattern.compile(regex);
+        final Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
+    }
 }

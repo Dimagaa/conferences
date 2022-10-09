@@ -1,8 +1,9 @@
 package com.webapp.conferences.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class User {
+public class User implements Serializable {
     private long id;
     private String login;
     private String password;
