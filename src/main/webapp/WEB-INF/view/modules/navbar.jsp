@@ -1,10 +1,10 @@
-<jsp:useBean id="user" scope="session" type="com.webapp.conferences.model.User"/>
 <%--
   User: Dmytro Martyshchuk
   Date: 09/10/2022
   E-mail: Di.mart.ap@gmail.com
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <nav class="navbar navbar-dark bg-dark bg-gradient" aria-label="Header navbar">
   <div class="container-fluid">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/events">ConferencesWeb</a>
@@ -13,13 +13,15 @@
                 <span class="bi bi-person nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
                       aria-expanded="false"></span>
         <ul class="dropdown-menu dropdown-menu-end">
-          <li class="dropdown-header fs-5">${sessionScope.user.firstName} ${sessionScope.user.lastName}</li>
+
+          <li class="dropdown-header fs-5">${sessionScope.userName}</li>
           <li class="dropdown-item">Notifications</li>
           <li class="dropdown-item">Edit profile</li>
-          <li class="dropdown-item">
-            <a href="${pageContext.request.contextPath}/logout">
+          <li  class="dropdown-item">
+            <a class="nav-link" href="${pageContext.request.contextPath}/logout">
               Log Out
             </a>
+
           </li>
         </ul>
       </div>

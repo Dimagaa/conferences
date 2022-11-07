@@ -21,7 +21,7 @@ public class MySQLConnectionManager implements ConnectionManager {
     private MySQLConnectionManager() {
     }
 
-    public static MySQLConnectionManager getInstance() {
+    public static ConnectionManager getInstance() {
         if(instance == null) {
             synchronized (MySQLConnectionManager.class) {
                 if(instance == null) {
@@ -32,6 +32,7 @@ public class MySQLConnectionManager implements ConnectionManager {
         return instance;
     }
 
+    @Override
     public Connection getConnection() throws DaoException {
         if(dataSource == null) {
             initDataSource();
@@ -49,12 +50,12 @@ public class MySQLConnectionManager implements ConnectionManager {
     @Override
     public Connection getTransaction() throws DaoException {
         try {
+            logger.trace("Get transaction");
             Connection connection = getConnection();
-            logger.trace("Start transaction");
             connection.setAutoCommit(false);
             return connection;
         } catch (SQLException e) {
-            throw new DaoException(e);
+            throw new DaoException("Getting transaction failed", e);
         }
     }
 
@@ -63,7 +64,7 @@ public class MySQLConnectionManager implements ConnectionManager {
         try {
             connection.commit();
         } catch (SQLException e) {
-            throw new DaoException(e);
+            throw new DaoException("Commit failed", e);
         }
     }
 
@@ -73,18 +74,23 @@ public class MySQLConnectionManager implements ConnectionManager {
             logger.trace("Rollback transaction");
             connection.rollback();
         } catch (SQLException e) {
-            throw new DaoException(e);
+            throw new DaoException("Rollback failed", e);
         }
     }
 
     @Override
     public void close(Connection connection) throws DaoException {
         try {
-            connection.setAutoCommit(true);
-            connection.close();
+            if(connection != null) {
+                connection.close();
+            }
         } catch (SQLException e) {
-            throw new DaoException(e);
+            throw new DaoException("Closing failed", e);
         }
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
     private synchronized void initDataSource() throws DaoException {
         if(dataSource == null) {

@@ -1,7 +1,6 @@
 package com.webapp.conferences.controllers.listeners;
 
-import com.webapp.conferences.dao.DaoFactory;
-import com.webapp.conferences.exceptions.DaoException;
+import com.webapp.conferences.services.EventService;
 import com.webapp.conferences.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,16 +18,11 @@ public class ContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         logger.info("Starting Conference WebApp");
-        ServletContext ctx = sce.getServletContext();
-        DaoFactory daoFactory = DaoFactory.getDaoFactory(ctx.getInitParameter("db_name"));
-        try {
-            UserService userService = new UserService(daoFactory.getUserDao());
-            ctx.setAttribute("user_service", userService);
-        } catch (DaoException e) {
-            throw new RuntimeException(e);
-        }
+        final ServletContext ctx = sce.getServletContext();
+        final String dbName = (ctx.getInitParameter("db_name"));
 
-
+        ctx.setAttribute("user_service", new UserService(dbName));
+        ctx.setAttribute("event_service", new EventService(dbName));
     }
 
     @Override

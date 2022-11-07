@@ -1,9 +1,6 @@
 package com.webapp.conferences.dao.impl.mysql;
 
-import com.webapp.conferences.dao.DaoFactory;
-import com.webapp.conferences.dao.EventDao;
-import com.webapp.conferences.dao.ReportDao;
-import com.webapp.conferences.dao.UserDao;
+import com.webapp.conferences.dao.*;
 
 public class MySQLDaoFactory extends DaoFactory {
 

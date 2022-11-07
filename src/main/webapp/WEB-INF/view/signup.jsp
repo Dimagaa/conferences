@@ -3,7 +3,7 @@
   Date: 11/09/2022
   E-mail: Di.mart.ap@gmail.com
 --%>
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>

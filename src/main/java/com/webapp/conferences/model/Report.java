@@ -7,6 +7,7 @@ public class Report implements Serializable {
     private String topic;
     private long eventId;
     private long speakerId;
+    private Status status;
 
     public long getId() {
         return id;
@@ -60,5 +61,20 @@ public class Report implements Serializable {
         result = 31 * result + (int) (eventId ^ (eventId >>> 32));
         result = 31 * result + (int) (speakerId ^ (speakerId >>> 32));
         return result;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public enum Status {
+        CONSOLIDATED,
+        UNCONFIRMED,
+        UNDETAILED,
+        PROPOSED
     }
 }

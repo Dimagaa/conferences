@@ -9,7 +9,7 @@ public class User implements Serializable {
     private String password;
     private String firstName;
     private String lastName;
-    private ROLE role;
+    private Role role;
 
 
 
@@ -53,11 +53,11 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public ROLE getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(ROLE role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
@@ -74,7 +74,7 @@ public class User implements Serializable {
         return Objects.hash(id, login, password, firstName, lastName, role);
     }
 
-    public enum ROLE {
+    public enum Role {
         USER,
         SPEAKER,
         MODERATOR

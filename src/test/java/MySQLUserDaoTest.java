@@ -1,16 +1,17 @@
 import com.webapp.conferences.dao.impl.mysql.MySQLUserDao;
 import com.webapp.conferences.exceptions.DaoException;
 import com.webapp.conferences.model.User;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import util.TestsConnectionManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 public class MySQLUserDaoTest {
 
@@ -19,18 +20,18 @@ public class MySQLUserDaoTest {
 
     private List<User> users;
 
-    @BeforeClass
-    public static void beforeClass() {
+    @BeforeAll
+    public static void beforeClass() throws DaoException {
         connectorManager = new TestsConnectionManager();
         connectorManager.init();
     }
-    @Before
+    @BeforeEach
     public void init() {
         userDao = new MySQLUserDao(connectorManager);
         users = createUserList(7);
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws DaoException {
         for(User user : users) {
             userDao.delete(user.getId());
@@ -41,14 +42,14 @@ public class MySQLUserDaoTest {
     public void testFindAll() throws DaoException {
         assertTrue(userDao.findAll().isEmpty());
         insertUser();
-        assertEquals(userDao.findAll(), users);
+        assertEquals(users, userDao.findAll());
 
     }
 
     @Test
     public void testAddWhenUserIsCorrect() throws DaoException {
         for (User user: users) {
-            assertTrue(userDao.add(user) > 0);
+            assertNotNull(userDao.add(user));
         }
     }
 
@@ -92,11 +93,11 @@ public class MySQLUserDaoTest {
             user.setFirstName("test_user" + i);
             user.setLastName("test_user" + i);
             if((i+1)%3 == 0) {
-                user.setRole(User.ROLE.USER);
+                user.setRole(User.Role.USER);
             } else if((i+1)%2 == 0) {
-                user.setRole(User.ROLE.SPEAKER);
+                user.setRole(User.Role.SPEAKER);
             } else {
-                user.setRole(User.ROLE.MODERATOR);
+                user.setRole(User.Role.MODERATOR);
             }
             res.add(user);
         }

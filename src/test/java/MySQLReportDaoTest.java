@@ -18,8 +18,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MySQLReportDaoTest {
     private ReportDao reportDao;
@@ -30,7 +29,7 @@ public class MySQLReportDaoTest {
     Event event;
 
     @BeforeAll
-    public static void beforeClass() {
+    public static void beforeClass() throws DaoException {
         connectionManager = new TestsConnectionManager();
         connectionManager.init();
     }
@@ -71,9 +70,14 @@ public class MySQLReportDaoTest {
     }
 
     @Test
+    void testFindByIdIfReportIsNotExist() throws DaoException {
+        assertTrue(reportDao.findById(999).isEmpty());
+    }
+
+    @Test
     void testAdd() throws DaoException {
         for(Report report : reports) {
-            assertTrue(reportDao.add(report) > 0);
+            assertNotNull(reportDao.add(report));
         }
     }
 
@@ -122,10 +126,8 @@ public class MySQLReportDaoTest {
         user.setPassword("Test");
         user.setFirstName("Test");
         user.setLastName("Test");
-        user.setRole(User.ROLE.USER);
-        user.setId(userDao.add(user));
-
-        return user;
+        user.setRole(User.Role.USER);
+        return userDao.add(user);
     }
 
     private Event insertEvent() throws DaoException {
@@ -136,8 +138,8 @@ public class MySQLReportDaoTest {
         event.setPlace("test");
         event.setStartTime(new Timestamp(System.currentTimeMillis()));
         event.setEndTime(new Timestamp(System.currentTimeMillis()));
-        event.setLimitEvents(3);
-        event.setId(eventDao.add(event));
+        event.setLimit(3);
+        eventDao.add(event);
         return event;
     }
 

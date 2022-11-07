@@ -3,6 +3,7 @@ import com.webapp.conferences.dao.impl.mysql.MySQLEventDao;
 import com.webapp.conferences.exceptions.DaoException;
 import com.webapp.conferences.model.Event;
 
+import com.webapp.conferences.services.pagination.Page;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,8 +14,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MySQLEventDaoTest {
 
@@ -24,7 +24,7 @@ public class MySQLEventDaoTest {
     private List<Event> events;
 
     @BeforeAll
-    public static void beforeClass() {
+    public static void beforeClass() throws DaoException {
         connectionManager = new TestsConnectionManager();
         connectionManager.init();
     }
@@ -61,7 +61,7 @@ public class MySQLEventDaoTest {
     @Test
     void testAdd() throws DaoException {
         for(Event event : events) {
-            assertTrue(eventDao.add(event) > 0);
+            assertNotNull(eventDao.add(event));
         }
     }
 
@@ -84,6 +84,32 @@ public class MySQLEventDaoTest {
         assertTrue(eventDao.findAll().isEmpty());
     }
 
+    @Test
+    void testGetPreparedEventsResultNotNull() throws DaoException {
+        Page page = new Page(1, 4);
+        assertNotNull(eventDao.getPreparedEvents(page));
+    }
+    @Test
+    void testGetPreparedEventsWithoutFilters() throws DaoException {
+        insertEvents();
+        Page page = new Page(1, 4);
+        assertEquals(4, eventDao.getPreparedEvents(page).size());
+    }
+
+    @Test
+    void testGetPreparedEventsWithFilterByActive() throws DaoException {
+        Page page = new Page(1, 4);
+        page.setFilterParameter("activeEvents", "true");
+        assertTrue(eventDao.getPreparedEvents(page).isEmpty());
+    }
+
+    @Test
+    void testGetPreparedEventsWithFilterBySpeaker() throws DaoException {
+        Page page = new Page(1, 4);
+        page.setFilterParameter("eventsBySpeaker", "Speaker Test");
+        assertTrue(eventDao.getPreparedEvents(page).isEmpty());
+    }
+
     private List<Event> creatEvents(int count) {
         List<Event> res = new ArrayList<>();
         for(int i = 0; i < count; i++ ) {
@@ -92,7 +118,7 @@ public class MySQLEventDaoTest {
             event.setStartTime(new Timestamp(1_663_668_000_000L));
             event.setEndTime(new Timestamp(1_663_675_200_000L));
             event.setPlace("TestEvent");
-            event.setLimitEvents(i+1);
+            event.setLimit(i+1);
             res.add(event);
         }
         return res;
