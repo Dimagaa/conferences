@@ -157,3 +157,46 @@
 .has-request-icon::before {
     content: "\f4dd";
 }
+.badge-count {
+    background: linear-gradient(230deg, rgb(255 22 183 / 79%), rgb(181 74 241 / 52%));
+}
+.badge-hasProposed {
+    float: top;
+    margin-left: auto;
+    background: linear-gradient(230deg, rgba(245, 0, 0, 0.79), rgb(196, 48, 48));
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+}
+.badge-hasProposed::before {
+    content: "\F289";
+}
+.badge-uncompleted {
+    float: top;
+    margin-left: auto;
+    background: linear-gradient(230deg, rgba(0, 151, 245, 0.79), rgb(24, 68, 217));
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+}
+.badge-uncompleted::before {
+    content: "\f4fa";
+}
+.badge-completed {
+    float: top;
+    margin-left: auto;
+    background: linear-gradient(230deg, rgb(24, 126, 41), rgb(21, 114, 18));
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+}
+.badge-completed::before {
+    content: "\F270";
+}
+.accordion-button:after {
+    display: none;
+}
+.globe-lang::before {
+    content: "\F3EE";
+    margin-right: 0.3rem;
+}
+.lang-option {
+    cursor: pointer;
+}

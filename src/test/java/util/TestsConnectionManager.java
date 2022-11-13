@@ -1,8 +1,8 @@
 package util;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
-import com.webapp.conferences.dao.ConnectionManager;
-import com.webapp.conferences.exceptions.DaoException;
+import com.conferences.dao.ConnectionManager;
+import com.conferences.exceptions.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.sql.DataSource;

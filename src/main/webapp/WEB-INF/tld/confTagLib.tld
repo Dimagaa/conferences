@@ -10,7 +10,7 @@
     <uri>WEB-INF/tld/configTagLib</uri>
     <tag>
         <name>renderOptions</name>
-        <tag-class>com.webapp.conferences.taglib.OptionBuilder</tag-class>
+        <tag-class>com.conferences.taglib.OptionBuilder</tag-class>
         <body-content>empty</body-content>
         
         <attribute>
@@ -28,7 +28,7 @@
     </tag>
     <tag>
         <name>filterPath</name>
-        <tag-class>com.webapp.conferences.taglib.filterPath</tag-class>
+        <tag-class>com.conferences.taglib.filterPath</tag-class>
         <body-content>empty</body-content>
         <attribute>
             <name>servletPath</name>
@@ -38,7 +38,7 @@
     </tag>
     <tag>
         <name>accessRule</name>
-        <tag-class>com.webapp.conferences.taglib.AccessRule</tag-class>
+        <tag-class>com.conferences.taglib.AccessRule</tag-class>
         <body-content>scriptless</body-content>
         <attribute>
             <name>roleRules</name>
@@ -62,11 +62,15 @@
         </attribute>
     </tag>
     <tag-file>
-        <name>speaker</name>
-        <path>/WEB-INF/tags/speaker.tag</path>
+        <name>reportAction</name>
+        <path>/WEB-INF/tags/reportAction.tag</path>
     </tag-file>
     <tag-file>
         <name>reportMenu</name>
         <path>/WEB-INF/tags/reportMenu.tag</path>
+    </tag-file>
+    <tag-file>
+        <name>langSelector</name>
+        <path>/WEB-INF/tags/langSelector.tag</path>
     </tag-file>
 </taglib>

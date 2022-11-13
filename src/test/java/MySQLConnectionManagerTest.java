@@ -1,6 +1,6 @@
-import com.webapp.conferences.dao.ConnectionManager;
-import com.webapp.conferences.dao.impl.mysql.MySQLConnectionManager;
-import com.webapp.conferences.exceptions.DaoException;
+import com.conferences.dao.ConnectionManager;
+import com.conferences.dao.impl.mysql.MySQLConnectionManager;
+import com.conferences.exceptions.DaoException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

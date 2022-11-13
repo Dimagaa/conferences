@@ -1,3 +1,12 @@
+const joinEvent = (eventId, userId) => {
+    const  url = $('html').attr('data-contextPath') + "/events/action?";
+    doEventAction(url, 'joinEvent', {eventId, userId});
+}
+const leaveEvent = (eventId, userId) => {
+    const  url = $('html').attr('data-contextPath') + "/events/action?";
+    doEventAction(url, 'leaveEvent', {eventId, userId});
+}
+
 const addReport = (eventId, form) => {
     const params =$(form).serialize();
     const url = window.location.pathname + "?"+params;
@@ -26,6 +35,22 @@ const acceptSpeaker = (reportId, speakerId) => {
 const rejectSpeaker = (reportId, speakerId) => {
     const url = $('html').attr('data-contextPath') + "/events/action";
     doEventAction(url, "rejectSpeaker", {reportId, speakerId});
+}
+const acceptReport = (reportId) => {
+    const url = $('html').attr('data-contextPath') + "/events/action";
+    doEventAction(url, "acceptReport", reportId);
+}
+const rejectReport = (reportId) => {
+    const url = $('html').attr('data-contextPath') + "/events/action";
+    doEventAction(url, "rejectReport", reportId);
+}
+const proposeReport = (topic, speakerId, eventId) => {
+    const url = $('html').attr('data-contextPath') + "/events/action";
+    doEventAction(url, "proposeReport", {topic, speakerId, eventId});
+}
+const deletePropose = (reportId) => {
+    const url = $('html').attr('data-contextPath') + "/events/action";
+    doEventAction(url, "deleteReport", reportId);
 }
 const changeReportModalShow = (repEl, modal, repId) => {
     const selectize = speakerSelectize[1].selectize;
@@ -124,3 +149,35 @@ $(function () {
     }
     checkLimit();
 });
+
+const initOfferReportForm = (eventId) => {
+    const form = $('#offerReportForm').clone(true);
+    form.find("input[name~='eventId']").val(eventId);
+    form.addClass("needs-validation");
+    form.attr("button-target", "offerBtn");
+    form.find("input[name~='topic']").attr("for", "offerBtn");
+    form.removeClass("d-none");
+    formValidationEventListener(form);
+    validationEventListener(form.find('.validation'));
+    return form;
+}
+const destroyOfferReportForm = (form) => {
+    form.prev().removeClass("d-none")
+    form.remove();
+}
+$(document).on('click', '.offer-rep-btn', function () {
+    $(this).addClass("d-none");
+    $(this).after(initOfferReportForm(this.value));
+});
+$(document).on('click', '.offer-rep-save-btn', function () {
+    const form = $(this).closest('form');
+    const url = $('html').attr('data-contextPath') + "/events/action?"+form.serialize();
+    doEventAction(url, "proposeReport", true);
+})
+$(document).on('click', '.offer-rep-close-btn', function () {
+    const form = $(this).closest('form');
+    destroyOfferReportForm(form);
+});
+$(document).on('hide.bs.modal', '.event-card-modal', function () {
+    destroyOfferReportForm($(this).find("#offerReportForm"));
+})

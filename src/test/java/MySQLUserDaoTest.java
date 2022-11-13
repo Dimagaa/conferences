@@ -1,6 +1,6 @@
-import com.webapp.conferences.dao.impl.mysql.MySQLUserDao;
-import com.webapp.conferences.exceptions.DaoException;
-import com.webapp.conferences.model.User;
+import com.conferences.dao.impl.mysql.MySQLUserDao;
+import com.conferences.exceptions.DaoException;
+import com.conferences.model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -81,9 +81,6 @@ public class MySQLUserDaoTest {
         assertFalse(userDao.delete(-1));
 
     }
-
-
-
     private List<User> createUserList(int count) {
         List<User> res = new ArrayList<>();
         for(int i = 0; i < count; i++) {

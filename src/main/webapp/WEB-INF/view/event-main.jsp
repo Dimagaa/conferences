@@ -7,12 +7,18 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="ctl" uri="/WEB-INF/tld/confTagLib.tld" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+<c:set var="locale" value="${sessionScope.locale == null ? pageContext.response.locale : sessionScope.locale}"/>
+<fmt:setLocale value="${locale}"/>
+<fmt:setBundle basename="lang"/>
 <!DOCTYPE html>
 <html lang="en" data-contextPath="${pageContext.request.contextPath}">
 <head>
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <link id="contextPath" data-contextPath="${pageContext.request.contextPath}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.14.0/css/selectize.bootstrap5.min.css"
@@ -20,7 +26,7 @@
           crossorigin="anonymous"
           referrerpolicy="no-referrer"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-    <title>Profile</title>
+    <title><fmt:message key="events.text.head"/> </title>
 </head>
 <body class="bg-body-dark d-flex flex-column min-vh-100">
 <div class="container-fluid p-0 d-flex flex-column min-vh-100">
@@ -29,9 +35,22 @@
     <div class="container pb-5">
         <!-- Search -->
         <div class="row justify-content-center">
+            <c:set var="servletPath" value="${requestScope['javax.servlet.forward.servlet_path']}"/>
+            <c:if test='${(fn:endsWith(servletPath, "/filter"))}'>
+                <c:set var="servletPath" value='${fn:substringBefore(servletPath, "/filter")}'/>
+            </c:if>
             <div class="col mt-4 mb-4">
-                <form class="form-control">
-                    <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+                <form class="form-control" action='<ctl:filterPath servletPath="${servletPath}"/>' method="GET">
+                    <input type="submit" hidden aria-label="submit">
+                    <input class="form-control autocomplete"
+                           list="suggestion"
+                           name="search"
+                           type="text" placeholder="<fmt:message key="events.placeholder.search"/>"
+                           aria-label="Search"
+                           id="search">
+                    <datalist class="data" id="suggestion" for="search">
+
+                    </datalist>
                 </form>
             </div>
         </div>
@@ -42,7 +61,7 @@
                 <div class="row mt-5 d-flex justify-content-start align-items-center">
                     <!-- Page title -->
                     <div class="col-3">
-                        <p class="text-white-50 text-uppercase fs-1 fw-bolder text-center">Events</p>
+                        <p class="text-white-50 text-uppercase fs-1 fw-bolder text-center"><fmt:message key="events.text.head"/></p>
                     </div>
                     <!-- Pills nav-bar  -->
                     <div class="col-7">
@@ -53,30 +72,36 @@
                                        value=" ${requestScope['javax.servlet.forward.servlet_path'].replace(\"/filter\", \"\")}"/>
                                 <li class="nav-item">
                                     <a class="nav-link ${path.trim().equals("/events") ? "active" : ""}"
-                                       href="<c:url value="/events"/>">All Events</a>
+                                       href="<c:url value="/events"/>"><fmt:message key="events.navLink.allEvents"/></a>
                                 </li>
                                 <ctl:accessRule roleRules="USER SPEAKER" role="${sessionScope.role}">
                                     <li class="nav-item">
-                                        <a class="nav-link ${path.trim().equals("/events/joined") ? "active" : ""}" href="<c:url value="/events/joined"/>">Joined</a>
+                                        <a class="nav-link ${path.trim().equals("/events/joined") ? "active" : ""}"
+                                           href="<c:url value="/events/joined"/>"><fmt:message key="events.navLink.joined"/></a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link  ${path.trim().equals("/events/passed") ? "active" : ""}" href="<c:url value="/events/passed"/>">Passed</a>
+                                        <a class="nav-link  ${path.trim().equals("/events/passed") ? "active" : ""}"
+                                           href="<c:url value="/events/passed"/>"><fmt:message key="events.navLink.passed"/></a>
                                     </li>
                                 </ctl:accessRule>
                                 <ctl:accessRule roleRules="SPEAKER MODERATOR" role="${sessionScope.role}">
-                                    <li class="nav-item">
+                                    <li class="nav-item d-flex align-items-center">
                                         <a class="nav-link ${path.trim().equals("/events/developing") ? "active" : ""}"
-                                           href='<c:url value="/events/developing"/>'>Developing</a>
+                                           href='<c:url value="/events/developing"/>'><fmt:message key="events.navLink.developing"/>
+                                            <c:if test="${sessionScope.role == 'SPEAKER'}">
+                                                <span class="ms-1 badge rounded-pill badge-count text-center">${requestScope.countProposed > 0 ? requestScope.countProposed : ""}</span>
+                                            </c:if>
+                                        </a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link ${path.trim().equals("/events/canceled") ? "active" : ""}"
-                                           href="<c:url value="/events/canceled"/>">Canceled</a>
+                                           href="<c:url value="/events/canceled"/>"><fmt:message key="events.navLink.canceled"/></a>
                                     </li>
                                 </ctl:accessRule>
                                 <ctl:accessRule roleRules="MODERATOR" role="${sessionScope.role}">
                                     <li class="nav-item">
                                         <a class="nav-link ${path.trim().equals("/events/create") ? "active" : ""}"
-                                           href="<c:url value="/events/create"/>">Create</a>
+                                           href="<c:url value="/events/create"/>"><fmt:message key="events.navLink.create"/></a>
                                     </li>
                                 </ctl:accessRule>
 

@@ -1,9 +1,9 @@
-import com.webapp.conferences.dao.EventDao;
-import com.webapp.conferences.dao.impl.mysql.MySQLEventDao;
-import com.webapp.conferences.exceptions.DaoException;
-import com.webapp.conferences.model.Event;
+import com.conferences.dao.EventDao;
+import com.conferences.dao.impl.mysql.MySQLEventDao;
+import com.conferences.exceptions.DaoException;
+import com.conferences.model.Event;
 
-import com.webapp.conferences.services.pagination.Page;
+import com.conferences.services.pagination.Page;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

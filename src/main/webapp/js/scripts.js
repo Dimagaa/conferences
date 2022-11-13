@@ -105,9 +105,7 @@ const validation = (targetBtn) => {
         targetButton.setAttribute('disabled', 'true');
     }
 }
-
-$(function (){
-    const fields = $('.validation');
+const validationEventListener = (fields) => {
     Array.from(fields).forEach(field => {
         field.addEventListener('focusout', evt => {
             if(!validateField(field)) {
@@ -115,22 +113,37 @@ $(function (){
             }
         })
     })
-})
-
-$(function (){
-    const forms = document.querySelectorAll('.needs-validation');
+}
+const formValidationEventListener = (forms) => {
     Array.from(forms).forEach(form => {
         form.addEventListener('input', evt => {
             const targetButton = form.getAttribute('button-target');
             validation(targetButton);
-            }, false);
+        }, false);
     })
-});
+}
+$(function (){
+    validationEventListener($('.validation'));
+    formValidationEventListener($('.needs-validation'));
+})
+
 $(document).on('input', '.readable-slider', function () {
     $('.out-slider').html($(this).val());
 });
 
 $(function (){
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 })
+
+$(function (){
+    $(".lang-option").click(function () {
+        $.ajax({
+            url: $('#contextPath').attr("data-ContextPath") + "/locale",
+            type: "GET",
+            data: { locale: this.getAttribute('value')}
+        }).done(function () {
+            window.location.reload();
+        });
+    });
+});

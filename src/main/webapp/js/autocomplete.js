@@ -25,6 +25,7 @@ const storeSelectedSpeakers = (speaker) => {
 $(document).on('input', '.autocomplete', function () {
     const dataList = this.parentNode.querySelector('datalist');
     let out = "";
+    const target = this.getAttribute("name");
     const callback = (data) => {
         if(!data) {
             return;
@@ -38,7 +39,7 @@ $(document).on('input', '.autocomplete', function () {
     if(item && item.getAttribute("value").includes(this.value)) {
         return;
     }
-    getData(this.value, callback, 'place')
+    getData(this.value, callback, target)
 });
 const speakerSelectize = $('.speaker-autocomplete').selectize({
     valueField: 'id',

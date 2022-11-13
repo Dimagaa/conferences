@@ -1,7 +1,7 @@
-import com.webapp.conferences.dao.parameters.FilterParameter;
-import com.webapp.conferences.dao.impl.mysql.util.MySQLQueryBuilder;
-import com.webapp.conferences.dao.parameters.SortParameter;
-import com.webapp.conferences.exceptions.DaoException;
+import com.conferences.dao.parameters.FilterParameter;
+import com.conferences.dao.impl.mysql.util.MySQLQueryBuilder;
+import com.conferences.dao.parameters.SortParameter;
+import com.conferences.exceptions.DaoException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.stream.Stream;
 
-import static com.webapp.conferences.dao.impl.mysql.util.MySQLQueryBuilder.Condition.*;
+import static com.conferences.dao.impl.mysql.util.MySQLQueryBuilder.Condition.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -87,7 +87,7 @@ public class MySQLQueryBuilderTest {
     void orderByTestWhenWithValidParameters() throws DaoException {
         builder.select("test").from("test_table");
         SortParameter sortParameter = new SortParameter("test_id", SortParameter.Order.ASC);
-        String expected = "SELECT test FROM test_table ORDER BY ? ASC";
+        String expected = "SELECT test FROM test_table ORDER BY test_id ASC";
         assertEquals(expected, builder.orderBy(sortParameter.getClause(), sortParameter.getOrder()).getQuery());
     }
 
@@ -98,7 +98,7 @@ public class MySQLQueryBuilderTest {
             return Stream.of(
                     Arguments.of("WHERE test_field1 = ?", new FilterParameter("test_field1", "test_value", EQUAL)),
                     Arguments.of("WHERE test_field1 IN ?", new FilterParameter("test_field1", "test_value", IN)),
-                    Arguments.of("WHERE test_field1 > ?", new FilterParameter("test_field1", "test_value", GREATER_THAN)),
+                    Arguments.of("WHERE test_field1 > ?", new FilterParameter("test_field1", "test_value", MySQLQueryBuilder.Condition.GREATER_THAN)),
                     Arguments.of("WHERE test_field1 < ?", new FilterParameter("test_field1", "test_value", LESS_THAN)),
                     Arguments.of("WHERE test_field1 >= ?", new FilterParameter("test_field1", "test_value", GREATER_THAN_OR_EQUAL)),
                     Arguments.of("WHERE test_field1 <= ?", new FilterParameter("test_field1", "test_value", LESS_THAN_OR_EQUAL))

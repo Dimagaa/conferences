@@ -8,7 +8,7 @@
 
     <servlet>
         <servlet-name>SignUp</servlet-name>
-        <servlet-class>com.webapp.conferences.controllers.servlets.SignUp</servlet-class>
+        <servlet-class>com.conferences.controllers.servlets.SignUp</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>SignUp</servlet-name>
@@ -17,7 +17,7 @@
 
     <servlet>
         <servlet-name>Login</servlet-name>
-        <servlet-class>com.webapp.conferences.controllers.servlets.Login</servlet-class>
+        <servlet-class>com.conferences.controllers.servlets.Login</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
@@ -25,7 +25,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>Events</servlet-name>
-        <servlet-class>com.webapp.conferences.controllers.servlets.Events</servlet-class>
+        <servlet-class>com.conferences.controllers.servlets.Events</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Events</servlet-name>
@@ -49,7 +49,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>CreateEvent</servlet-name>
-        <servlet-class>com.webapp.conferences.controllers.servlets.CreateEvent</servlet-class>
+        <servlet-class>com.conferences.controllers.servlets.CreateEvent</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CreateEvent</servlet-name>
@@ -57,7 +57,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>EventAction</servlet-name>
-        <servlet-class>com.webapp.conferences.controllers.servlets.EventsAction</servlet-class>
+        <servlet-class>com.conferences.controllers.servlets.EventsAction</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>EventAction</servlet-name>
@@ -69,7 +69,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>Logout</servlet-name>
-        <servlet-class>com.webapp.conferences.controllers.servlets.Logout</servlet-class>
+        <servlet-class>com.conferences.controllers.servlets.Logout</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Logout</servlet-name>
@@ -77,7 +77,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>AutoComplete</servlet-name>
-        <servlet-class>com.webapp.conferences.controllers.servlets.Autocomplete</servlet-class>
+        <servlet-class>com.conferences.controllers.servlets.Autocomplete</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AutoComplete</servlet-name>
@@ -85,7 +85,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>ContentFilter</servlet-name>
-        <servlet-class>com.webapp.conferences.controllers.servlets.ContentFilter</servlet-class>
+        <servlet-class>com.conferences.controllers.servlets.ContentFilter</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ContentFilter</servlet-name>
@@ -107,10 +107,18 @@
         <servlet-name>ContentFilter</servlet-name>
         <url-pattern>/events/passed/filter</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>Locale</servlet-name>
+        <servlet-class>com.conferences.controllers.servlets.Locale</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Locale</servlet-name>
+        <url-pattern>/locale</url-pattern>
+    </servlet-mapping>
     <!-- Authentication filter -->
     <filter>
         <filter-name>Encoding</filter-name>
-        <filter-class>com.webapp.conferences.controllers.filters.EncodingFilter</filter-class>
+        <filter-class>com.conferences.controllers.filters.EncodingFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>Encoding</filter-name>
@@ -118,10 +126,10 @@
     </filter-mapping>
     <filter>
         <filter-name>Auth Filter</filter-name>
-        <filter-class>com.webapp.conferences.controllers.filters.AuthFilter</filter-class>
+        <filter-class>com.conferences.controllers.filters.AuthFilter</filter-class>
         <init-param>
             <param-name>excludedUrls</param-name>
-            <param-value>/login,/signup,/css/style.css,/js/scripts.js</param-value>
+            <param-value>/login,/signup,/css/style.css,/js/scripts.js,/locale</param-value>
         </init-param>
     </filter>
     <filter-mapping>
@@ -130,7 +138,7 @@
     </filter-mapping>
     <filter>
         <filter-name>Access Filter</filter-name>
-        <filter-class>com.webapp.conferences.controllers.filters.AccessFilter</filter-class>
+        <filter-class>com.conferences.controllers.filters.AccessFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>Access Filter</filter-name>

@@ -6,10 +6,15 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<c:set var="locale" value="${sessionScope.locale == null ? pageContext.response.locale : sessionScope.locale}"/>
+<fmt:setLocale value="${locale}"/>
+<fmt:setBundle basename="lang"/>
+
 <div class="row d-flex justify-content-center align-items-center">
     <div class="card col-10 mt-5" style="border-radius: 2rem">
         <div class="card-body">
-
             <form action="${pageContext.request.contextPath}/events/change?action=save"
                   button-target="saveBtn"
                   method="post"
@@ -26,8 +31,8 @@
                                    id="name"
                                    placeholder="Event head"
                                    value="${requestScope.event.name}">
-                            <label class="form-label" for="name">Header of the Event*</label>
-                            <div class="invalid-feedback">Header is required</div>
+                            <label class="form-label" for="name"><fmt:message key="editEvent.label.eventTitle"/></label>
+                            <div class="invalid-feedback"><fmt:message key="editEvent.invalidFeedback.eventTitle"/></div>
                         </div>
                     </div>
                 </div>
@@ -40,8 +45,8 @@
                                    name="start"
                                    id="startTime"
                                    value="${requestScope.event.startTime}">
-                            <label for="startTime">Start*</label>
-                            <div class="invalid-feedback">Please, select date and time for start Event</div>
+                            <label for="startTime"><fmt:message key="editEvent.label.start"/></label>
+                            <div class="invalid-feedback"><fmt:message key="editEvent.invalidFeedback.start"/></div>
                         </div>
                     </div>
                     <div class="col-md">
@@ -53,8 +58,8 @@
                                        name="end"
                                        id="endTime"
                                        value="${requestScope.event.endTime}">
-                                <label for="endTime">End*</label>
-                                <div class="invalid-feedback">Please, select date and time for end Event</div>
+                                <label for="endTime"><fmt:message key="editEvent.label.end"/></label>
+                                <div class="invalid-feedback"><fmt:message key="editEvent.invalidFeedback.end"/></div>
                             </div>
                         </div>
                     </div>
@@ -70,8 +75,8 @@
                                    id="place"
                                    placeholder="Place"
                                    value="${requestScope.event.place}">
-                            <label class="form-label" for="place">Place</label>
-                            <div class="invalid-feedback">This field is required</div>
+                            <label class="form-label" for="place"><fmt:message key="editEvent.label.place"/></label>
+                            <div class="invalid-feedback"><fmt:message key="editEvent.invalidFeedback.place"/></div>
                             <datalist class="data" id="places" for="place">
 
                             </datalist>
@@ -81,24 +86,23 @@
                 <div class="row mb-4">
                     <div class="col-md">
                         <div>
-                            <label for="limit" class="form-label">Number of reports</label>
+                            <label for="limit" class="form-label"><fmt:message key="editEvent.label.numberOfReports"/></label>
                             <input type="range"
                                    name="limit"
                                    class="form-range readable-slider"
                                    min="1" max="15" step="1"
                                    value="${requestScope.event == null ? 1 : requestScope.event.limit}"
                                    id="limit">
-                            <div class="invalid-feedback">Reports count is over limit. Last added reports will be
-                                deleted
+                            <div class="invalid-feedback">
+                                <fmt:message key="editEvent.invalidFeedback.numberOfReports"/>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="row mb-4">
                     <div class="col-md">
                         <p class="text-center fs-5 fw-semibold">
-                            Reports <span id="reportsCount">${fn:length(requestScope.reports)}</span>/<span
+                            <fmt:message key="editEvent.subhead.reports"/> <span id="reportsCount">${fn:length(requestScope.reports)}</span>/<span
                                 class="out-slider">${requestScope.event == null ? 1 : requestScope.event.limit}</span>
                         </p>
                     </div>
@@ -132,7 +136,8 @@
                         <div>
                             <button class="btn btn-outline-dark btn-lg" type="button" id="openReportModal"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#insertReport">Add Report
+                                    data-bs-target="#insertReport">
+                                <fmt:message key="editReport.button.addReport"/>
                             </button>
                         </div>
                         <div class="ms-3">
@@ -141,7 +146,8 @@
 
                             <button class="btn btn-outline-dark btn-lg px-5" name="eventId"
                                     value="${requestScope.event.id}" id="saveBtn"
-                                    type="submit" disabled>Save
+                                    type="submit" disabled>
+                                <fmt:message key="editEvent.button.save"/>
                             </button>
                         </div>
                     </div>
@@ -153,32 +159,32 @@
                     <div class="modal-content">
                         <form button-target="addBtn" class="needs-validation" id="addReportForm">
                             <div class="modal-header">
-                                <h5 class="modal-title">Add report</h5>
+                                <h5 class="modal-title"><fmt:message key="editReport.head.addReport"/></h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <div class="row mb-4">
                                     <div class="col-md">
-                                        <label for="topic" class="text-center fs-5 w-100">Topic of report</label>
+                                        <label for="topic" class="text-center fs-5 w-100"><fmt:message key="editReport.label.topic"/></label>
                                         <input type="text"
                                                class="form-control form-control-lg p-2 validation"
                                                for="addBtn"
                                                name="topic"
                                                id="topic"
                                                placeholder="Topic of report">
-                                        <div class="invalid-feedback">Topic of report is required</div>
+                                        <div class="invalid-feedback"><fmt:message key="editReport.invalidFeedback.topic"/></div>
                                     </div>
                                 </div>
                                 <div class="row mb-4">
                                     <div class="col-md">
-                                        <label for="speaker" class="w-100 text-center fs-5 ">Speaker</label>
+                                        <label for="speaker" class="w-100 text-center fs-5 "><fmt:message key="editReport.label.speaker"/></label>
                                         <select
                                                 class="form-select-lg p-2 speaker-autocomplete"
                                                 for="addBtn"
                                                 id="speaker"
                                                 name="speaker"
-                                                placeholder="Type to search">
+                                                placeholder="<fmt:message key="filters.placeholder.typeToSearch"/>">
                                         </select>
                                     </div>
                                 </div>
@@ -186,10 +192,10 @@
                             <div class="modal-footer justify-content-center">
                                 <button type="button" class="btn btn-outline-dark btn-lg" id="addBtn"
                                         onclick='addReport(${requestScope.event.id}, "#addReportForm")' disabled>
-                                    Add Report
+                                    <fmt:message key="editReport.button.addReport"/>
                                 </button>
                                 <button type="button" class="btn btn-outline-dark btn-lg" data-bs-dismiss="modal">
-                                    Cancel
+                                    <fmt:message key="editReport.button.cancel"/>
                                 </button>
                             </div>
                         </form>
@@ -204,43 +210,43 @@
                         <form button-target="chBtn" class="needs-validation" id="changeReportForm">
                             <input name="reportId" type="hidden">
                             <div class="modal-header">
-                                <h5 class="modal-title">Change report</h5>
+                                <h5 class="modal-title"><fmt:message key="editReport.head.changeReport"/></h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <div class="row mb-4">
                                     <div class="col-md">
-                                        <label for="chTopic" class="text-center fs-5 w-100">Topic of report</label>
+                                        <label for="chTopic" class="text-center fs-5 w-100"><fmt:message key="editReport.label.topic"/></label>
                                         <input type="text"
                                                class="form-control form-control-lg p-2 validation"
                                                for="chBtn"
                                                name="topic"
                                                id="chTopic"
                                                placeholder="Topic of report">
-                                        <div class="invalid-feedback">Topic of report is required</div>
+                                        <div class="invalid-feedback"><fmt:message key="editReport.invalidFeedback.topic"/></div>
                                     </div>
                                 </div>
                                 <div class="row mb-4">
                                     <div class="col-md">
-                                        <label for="chSpeaker" class="w-100 text-center fs-5 ">Speaker</label>
+                                        <label for="chSpeaker" class="w-100 text-center fs-5 "><fmt:message key="editReport.label.speaker"/></label>
                                         <select
                                                 class="form-select-lg p-2 speaker-autocomplete"
                                                 for="chBtn"
                                                 id="chSpeaker"
                                                 name="speaker"
-                                                placeholder="Type to search">
+                                                placeholder="<fmt:message key="filters.placeholder.typeToSearch"/>">
                                         </select>
                                     </div>
                                 </div>
                             </div>
                             <div class="modal-footer justify-content-center">
                                 <button type="button" class="btn btn-outline-dark btn-lg" data-bs-dismiss="modal">
-                                    Cancel
+                                    <fmt:message key="editReport.button.cancel"/>
                                 </button>
                                 <button type="button" class="btn btn-outline-dark btn-lg" id="chBtn"
-                                        onclick='updateReport(${requestScope.event.id}, "#changeReportForm")'>Change
-                                    Report
+                                        onclick='updateReport(${requestScope.event.id}, "#changeReportForm")'>
+                                    <fmt:message key="editReport.button.changeReport"/>
                                 </button>
                             </div>
                         </form>
@@ -249,6 +255,5 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
