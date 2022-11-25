@@ -115,6 +115,10 @@
         <servlet-name>Locale</servlet-name>
         <url-pattern>/locale</url-pattern>
     </servlet-mapping>
+    <!-- Error page -->
+    <error-page>
+        <location>/WEB-INF/view/error/errorPage.jsp</location>
+    </error-page>
     <!-- Authentication filter -->
     <filter>
         <filter-name>Encoding</filter-name>

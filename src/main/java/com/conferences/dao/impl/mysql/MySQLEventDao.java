@@ -21,13 +21,10 @@ import static com.conferences.dao.impl.mysql.util.MySQLQueryBuilder.Condition.EQ
 public class MySQLEventDao extends GenericDao<Event> implements EventDao {
 
     protected final Logger logger = LogManager.getLogger("Global");
-
-    protected MySQLEventDao() {
-        super(MySQLConnectionManager.getInstance());
-    }
+    private final ConnectionManager connectionManager;
 
     public MySQLEventDao(ConnectionManager connectionManager) {
-        super(connectionManager);
+        this.connectionManager = connectionManager;
     }
 
     @Override
@@ -229,7 +226,7 @@ public class MySQLEventDao extends GenericDao<Event> implements EventDao {
             statement.setLong(2, userId);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
-            throw new DaoException("Cannot join event", e);
+            throw new DaoException("Cannot join to event", e);
         } finally {
             closeResources(null, statement);
             connectionManager.close(connection);
@@ -359,5 +356,4 @@ public class MySQLEventDao extends GenericDao<Event> implements EventDao {
         }
         return filters;
     }
-
 }

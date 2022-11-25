@@ -1,14 +1,16 @@
 package com.conferences.controllers.servlets;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet
+/**
+ * {@code HttpServlet} support {@code doGet} method.
+ * Provides logout function
+ */
 public class Logout extends HttpServlet {
 
     @Override

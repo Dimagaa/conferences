@@ -31,7 +31,6 @@ public class MySQLConnectionManager implements ConnectionManager {
         }
         return instance;
     }
-
     @Override
     public Connection getConnection() throws DaoException {
         if(dataSource == null) {

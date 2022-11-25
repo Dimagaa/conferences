@@ -45,7 +45,9 @@ public class Page {
 
     public Map<String, String> getFilters() {
         Map<String, String> rawFilter = new HashMap<>(filters);
-        targetFilters.forEach(rawFilter::putIfAbsent);
+        if(targetFilters != null) {
+            targetFilters.forEach(rawFilter::putIfAbsent);
+        }
         return rawFilter;
     }
 

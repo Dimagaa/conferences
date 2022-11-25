@@ -9,7 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,10 +23,16 @@ import static com.conferences.model.Event.Status;
 import static com.conferences.model.Event.Status.*;
 import static com.conferences.model.User.Role.SPEAKER;
 
-@WebServlet
+/**
+ *  <code>HttpServlet</code> support <code>doGet</code> and <code>doPost</code> methods.
+ *  Allows get configured web page with events
+ */
 public class Events extends HttpServlet {
-    private final Map<String, BiFunction<HttpServletRequest, String, Page>> targetContent = new HashMap<>();
 
+    /**
+     * {@link HashMap} contains servlet path as a key and corresponding {@link BiFunction} as a value
+     */
+    private final Map<String, BiFunction<HttpServletRequest, String, Page>> targetContent = new HashMap<>();
     {
         targetContent.put("/events/developing", (req, s) -> eventsByStatus(req, Status.DEVELOPING.name()));
         targetContent.put("/events/canceled", (req, s) -> eventsByStatus(req, Status.CANCELED.name()));
@@ -38,6 +43,21 @@ public class Events extends HttpServlet {
     final private Logger logger = LogManager.getLogger("Global");
 
 
+    /**
+     * Allows get events that corresponds to the preset parameters.
+     * Forwards a request from a servlet to {@code ../event-main.jsp}.
+     * If {@link DaoException} was occurred send internal server error
+     * @param req   an {@link HttpServletRequest} object that
+     *                  contains the request the client has made
+     *                  of the servlet
+     *
+     * @param resp  an {@link HttpServletResponse} object that
+     *                  contains the response the servlet sends
+     *                  to the client
+     *
+     * @throws ServletException if an input or output error occurs
+     * @throws IOException if the request for the HEAD could not be handled
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long userId = (long) req.getSession().getAttribute("userId");
@@ -48,12 +68,19 @@ public class Events extends HttpServlet {
             setEventAttribute(req, page);
         } catch (DaoException e) {
             logger.error("Can't execute get request", e);
-            req.getRequestDispatcher(req.getContextPath() + "/error").forward(req, resp);
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
         req.getRequestDispatcher("/WEB-INF/view/event-main.jsp").forward(req, resp);
     }
 
+    /**
+     * Gets prepared events and set it as request parameter.
+     * @param req the request object that is passed to the servlet
+     * @param page an {@link Page} object that store all filters, sorters params
+     *      *             and then will handle in Dao layers.
+     * @throws DaoException if executing {@link EventService} methods error occurs
+     */
     private void setEventAttribute(HttpServletRequest req, Page page) throws DaoException {
         EventService eventService = (EventService) getServletContext().getAttribute("event_service");
         long userId = (long) req.getSession().getAttribute("userId");
@@ -66,6 +93,12 @@ public class Events extends HttpServlet {
         }
     }
 
+    /**
+     * Gets {@link Page} from {@link javax.servlet.http.HttpSession} or create new if not present.
+     * New instance of {@link Page} will create with default page size 4 and default page number 1;
+     * @param req the request object that is passed to the servlet
+     * @return {@link Page}
+     */
     private Page getPage(HttpServletRequest req) {
         int pageSize = 4;
         Optional<Page> oPage = Optional.ofNullable((Page) req.getSession().getAttribute("page"));

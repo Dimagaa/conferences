@@ -1,9 +1,11 @@
 const getData = (query, callback, target) => {
     if (!query.length || query.length < 3) return callback();
     $.ajax({
-        url: $('html').attr('data-contextPath') + '/autocomplete', type: 'POST', dataType: 'json', data: {
-            query, target
-        }, error: function () {
+        url: $('html').attr('data-contextPath') + '/autocomplete',
+        type: 'POST',
+        dataType: 'json',
+        data: {query, target},
+        error: function () {
             callback();
         }, success: function (res) {
             callback(res);

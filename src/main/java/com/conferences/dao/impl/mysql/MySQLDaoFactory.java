@@ -21,16 +21,16 @@ public class MySQLDaoFactory extends DaoFactory {
 
     @Override
     public UserDao getUserDao() {
-        return new MySQLUserDao();
+        return new MySQLUserDao(MySQLConnectionManager.getInstance());
     }
 
     @Override
     public EventDao getEventDao() {
-        return new MySQLEventDao();
+        return new MySQLEventDao(MySQLConnectionManager.getInstance());
     }
 
     @Override
     public ReportDao getReportDao() {
-        return new MySQLReportDao();
+        return new MySQLReportDao(MySQLConnectionManager.getInstance());
     }
 }

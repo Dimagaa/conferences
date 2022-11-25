@@ -1,3 +1,5 @@
+package com.conferences.MySQLDaoTest;
+
 import com.conferences.dao.parameters.FilterParameter;
 import com.conferences.dao.impl.mysql.util.MySQLQueryBuilder;
 import com.conferences.dao.parameters.SortParameter;

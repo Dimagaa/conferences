@@ -1,3 +1,5 @@
+package com.conferences.MySQLDaoTest;
+
 import com.conferences.dao.EventDao;
 import com.conferences.dao.ReportDao;
 import com.conferences.dao.UserDao;
@@ -12,7 +14,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import util.TestsConnectionManager;
+import com.conferences.MySQLDaoTest.util.TestsConnectionManager;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -107,6 +109,7 @@ public class MySQLReportDaoTest {
             report.setEventId(event.getId());
             report.setSpeakerId(user.getId());
             report.setTopic("Another");
+            report.setStatus(Report.Status.UNCONFIRMED);
             res.add(report);
         }
         return res;
@@ -139,6 +142,7 @@ public class MySQLReportDaoTest {
         event.setStartTime(new Timestamp(System.currentTimeMillis()));
         event.setEndTime(new Timestamp(System.currentTimeMillis()));
         event.setLimit(3);
+        event.setStatus(Event.Status.DEVELOPING);
         eventDao.add(event);
         return event;
     }

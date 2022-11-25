@@ -1,4 +1,4 @@
-package util;
+package com.conferences.MySQLDaoTest.util;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 import com.conferences.dao.ConnectionManager;

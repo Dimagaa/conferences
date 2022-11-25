@@ -1,3 +1,5 @@
+package com.conferences.MySQLDaoTest;
+
 import com.conferences.dao.impl.mysql.MySQLUserDao;
 import com.conferences.exceptions.DaoException;
 import com.conferences.model.User;
@@ -5,7 +7,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import util.TestsConnectionManager;
+import com.conferences.MySQLDaoTest.util.TestsConnectionManager;
 
 import java.util.ArrayList;
 import java.util.List;

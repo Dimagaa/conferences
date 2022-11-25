@@ -1,3 +1,5 @@
+package com.conferences.MySQLDaoTest;
+
 import com.conferences.dao.EventDao;
 import com.conferences.dao.impl.mysql.MySQLEventDao;
 import com.conferences.exceptions.DaoException;
@@ -8,7 +10,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import util.TestsConnectionManager;
+import com.conferences.MySQLDaoTest.util.TestsConnectionManager;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -99,7 +101,7 @@ public class MySQLEventDaoTest {
     @Test
     void testGetPreparedEventsWithFilterByActive() throws DaoException {
         Page page = new Page(1, 4);
-        page.setFilterParameter("activeEvents", "true");
+        page.setFilterParameter("eventsByStatus", "Active");
         assertTrue(eventDao.getPreparedEvents(page).isEmpty());
     }
 
@@ -119,6 +121,7 @@ public class MySQLEventDaoTest {
             event.setEndTime(new Timestamp(1_663_675_200_000L));
             event.setPlace("TestEvent");
             event.setLimit(i+1);
+            event.setStatus(Event.Status.DEVELOPING);
             res.add(event);
         }
         return res;

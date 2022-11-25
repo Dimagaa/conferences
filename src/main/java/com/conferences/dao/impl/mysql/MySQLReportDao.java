@@ -15,14 +15,10 @@ import java.util.Optional;
 public class MySQLReportDao extends GenericDao<Report> implements ReportDao {
 
     private final Logger logger = LogManager.getLogger("Global");
-
-    protected MySQLReportDao() {
-        super(MySQLConnectionManager.getInstance());
-        logger.trace("MySQl ReportDao created");
-    }
+    private final ConnectionManager connectionManager;
 
     public MySQLReportDao(ConnectionManager connectionManager) {
-        super(connectionManager);
+        this.connectionManager = connectionManager;
         logger.trace("MySQl ReportDao created");
     }
 

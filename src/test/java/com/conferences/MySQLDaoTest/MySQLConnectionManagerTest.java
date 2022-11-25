@@ -1,3 +1,5 @@
+package com.conferences.MySQLDaoTest;
+
 import com.conferences.dao.ConnectionManager;
 import com.conferences.dao.impl.mysql.MySQLConnectionManager;
 import com.conferences.exceptions.DaoException;

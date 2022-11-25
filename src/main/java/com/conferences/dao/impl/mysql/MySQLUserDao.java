@@ -13,14 +13,11 @@ import java.util.Optional;
 
 public class MySQLUserDao extends GenericDao<User> implements UserDao {
 
-    protected MySQLUserDao() {
-        super(MySQLConnectionManager.getInstance());
-        logger.trace("MySQL USerDao created");
-    }
+    private final ConnectionManager connectionManager;
 
     public MySQLUserDao(ConnectionManager connectionManager) {
-        super(connectionManager);
-        logger.trace("MySQL USerDao created");
+        this.connectionManager = connectionManager;
+        logger.trace("MySQL UserDao created");
     }
 
     @Override

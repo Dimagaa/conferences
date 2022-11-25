@@ -23,9 +23,17 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
+/**
+ *  <code>HttpServlet</code> support <code>doGet</code> and <code>doPost</code> methods.
+ *  Provides methods for create, change, delete {@link Event} and {@link Report} objects
+ */
+public class
 
-public class EventsAction extends HttpServlet {
+ EventsAction extends HttpServlet {
 
+    /**
+     * {@link HashMap} that contain action names as keys and {@link Function} as value.
+     */
     private final Map<String, Function<HttpServletRequest, Boolean>> actions = new HashMap<>();
 
     {
@@ -49,6 +57,20 @@ public class EventsAction extends HttpServlet {
 
     private final Logger logger = LogManager.getLogger("Global");
 
+    /**
+     * Sets {@link Event} object and {@link Report} collection as {@link HttpServletRequest} attributes
+     * @param req   an {@link HttpServletRequest} object that
+     *                  contains the request the client has made
+     *                  of the servlet
+     *
+     * @param resp  an {@link HttpServletResponse} object that
+     *                  contains the response the servlet sends
+     *                  to the client
+     *
+     * @throws ServletException if the request for the HEAD
+     *                                  could not be handled
+     * @throws IOException if an input or output error occurs
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         EventService eventService = (EventService) getServletContext().getAttribute("event_service");
@@ -56,19 +78,36 @@ public class EventsAction extends HttpServlet {
         try {
             eventService.getEvent(eventId).ifPresent(e -> req.setAttribute("event", e));
             req.setAttribute("reports", eventService.getPreparedReports(eventId));
+            req.getRequestDispatcher("/WEB-INF/view/event-main.jsp").forward(req, resp);
         } catch (DaoException e) {
             logger.error("Cannot find event", e);
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
-        req.getRequestDispatcher("/WEB-INF/view/event-main.jsp").forward(req, resp);
+
     }
 
+    /**
+     * Takes {@link HttpServletRequest} parameter "action" as key {@link #actions}.
+     *If action executed with success and will {@link HttpServletRequest} parameter
+     * "redirectPath" is present will send redirect. Else if action executed with falls
+     * will send internal server error.
+     * @param req   an {@link HttpServletRequest} object that
+     *                  contains the request the client has made
+     *                  of the servlet
+     *
+     * @param resp  an {@link HttpServletResponse} object that
+     *                  contains the response the servlet sends
+     *                  to the client
+     *
+     * @throws IOException if an input or output error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String action = req.getParameter("action");
         Optional<String> path = Optional.ofNullable(req.getParameter("redirectPath"));
         boolean success = actions.get(action).apply(req);
         if (!success) {
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         if (path.isPresent()) {
             resp.sendRedirect(path.get());
@@ -79,15 +118,17 @@ public class EventsAction extends HttpServlet {
         EventService eventService = (EventService) getServletContext().getAttribute("event_service");
         Event event = new Event();
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-        try {
-            Optional.ofNullable(req.getParameter("eventId")).ifPresent(e -> event.setId(Long.parseLong(e)));
-            Optional.ofNullable(req.getParameter("title")).ifPresent(e -> event.setName(e.trim()));
-            Optional.ofNullable(req.getParameter("place")).ifPresent(e -> event.setPlace(e.trim()));
-            Optional.ofNullable(req.getParameter("limit")).ifPresent(e -> event.setLimit(Integer.parseInt(e)));
-            Optional.ofNullable(req.getParameter("status")).ifPresent(e -> event.setStatus(Event.Status.valueOf(e)));
 
-            String start = Optional.ofNullable(req.getParameter("start")).orElse("");
-            String end = Optional.ofNullable(req.getParameter("end")).orElse("");
+        Optional.ofNullable(req.getParameter("eventId")).ifPresent(e -> event.setId(Long.parseLong(e)));
+        Optional.ofNullable(req.getParameter("title")).ifPresent(e -> event.setName(e.trim()));
+        Optional.ofNullable(req.getParameter("place")).ifPresent(e -> event.setPlace(e.trim()));
+        Optional.ofNullable(req.getParameter("limit")).ifPresent(e -> event.setLimit(Integer.parseInt(e)));
+        Optional.ofNullable(req.getParameter("status")).ifPresent(e -> event.setStatus(Event.Status.valueOf(e)));
+
+        String start = Optional.ofNullable(req.getParameter("start")).orElse("");
+        String end = Optional.ofNullable(req.getParameter("end")).orElse("");
+
+        try {
             Timestamp startTime = start.isEmpty() ? null : new Timestamp(formatter.parse(start).getTime());
             Timestamp endTime = end.isEmpty() ? null : new Timestamp(formatter.parse(end).getTime());
             event.setStartTime(startTime);

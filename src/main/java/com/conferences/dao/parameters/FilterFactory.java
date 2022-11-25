@@ -11,7 +11,13 @@ import java.util.Map;
 
 import static com.conferences.dao.impl.mysql.util.MySQLQueryBuilder.Condition.*;
 
+/**
+ * Factory class that contain prepared templates with specific parameters for obtain data from the database
+ */
 public class FilterFactory {
+    /**
+     * {@link HashMap} contains method source that supplies {@link FilterParameter} object
+     */
     private final Map<String, FilterSupplier> filterStore = new HashMap<>();
 
     {
@@ -23,16 +29,18 @@ public class FilterFactory {
         filterStore.put("eventsByStatus", this::eventsByStatus);
     }
 
-
+    /**
+     * Allows get prepared filter
+     * @param filter a name of filter template
+     * @param value a parameter value
+     * @return prepared {@link FilterParameter} object
+     * @throws DaoException if a filter was not found
+     */
     public FilterParameter getFilter(String filter, String value) throws DaoException {
         if (filterStore.containsKey(filter)) {
             return filterStore.get(filter).getFilter(value);
         }
         throw new DaoException("Cannot get filter because filter not found: " + filter);
-    }
-
-    private FilterParameter activeEvents(String value) {
-        return new FilterParameter("status", Event.Status.ACTIVE.name(), EQUAL);
     }
 
     private FilterParameter expiredEvents(String value) {
