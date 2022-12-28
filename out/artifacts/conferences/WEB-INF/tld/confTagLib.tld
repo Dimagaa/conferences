@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+        version="2.1">
+
+    <tlib-version>1.0</tlib-version>
+
+    <short-name>confTags</short-name>
+    <uri>WEB-INF/tld/configTagLib</uri>
+    <tag>
+        <name>renderOptions</name>
+        <tag-class>com.conferences.taglib.OptionBuilder</tag-class>
+        <body-content>empty</body-content>
+        
+        <attribute>
+            <name>selectedItems</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.util.Map</type>
+        </attribute>
+        <attribute>
+            <name>items</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.util.HashMap</type>
+        </attribute>
+    </tag>
+    <tag>
+        <name>filterPath</name>
+        <tag-class>com.conferences.taglib.filterPath</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>servletPath</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    <tag>
+        <name>accessRule</name>
+        <tag-class>com.conferences.taglib.AccessRule</tag-class>
+        <body-content>scriptless</body-content>
+        <attribute>
+            <name>roleRules</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>role</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>contextRules</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>context</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    <tag-file>
+        <name>reportAction</name>
+        <path>/WEB-INF/tags/reportAction.tag</path>
+    </tag-file>
+    <tag-file>
+        <name>reportMenu</name>
+        <path>/WEB-INF/tags/reportMenu.tag</path>
+    </tag-file>
+    <tag-file>
+        <name>langSelector</name>
+        <path>/WEB-INF/tags/langSelector.tag</path>
+    </tag-file>
+</taglib>
