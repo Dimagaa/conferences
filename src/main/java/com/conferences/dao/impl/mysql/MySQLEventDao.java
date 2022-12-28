@@ -173,7 +173,7 @@ public class MySQLEventDao extends GenericDao<Event> implements EventDao {
         ResultSet rs = null;
         try {
             connection = connectionManager.getConnection();
-            statement = connection.prepareStatement("SELECT place FROM events WHERE place LIKE ?");
+            statement = connection.prepareStatement("SELECT DISTINCT place FROM events WHERE place LIKE ?");
             statement.setString(1, prefix);
             rs = statement.executeQuery();
             while (rs.next()) {

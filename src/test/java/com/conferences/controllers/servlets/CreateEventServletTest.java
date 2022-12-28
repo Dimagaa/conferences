@@ -51,7 +51,7 @@ public class CreateEventServletTest {
     public void testAddActionWhenReportTopicIsNull() throws IOException {
         when(req.getParameter("action")).thenReturn("addReport");
         servlet.doPost(req, resp);
-        verify(resp).sendRedirect("stub/error");
+        verify(resp).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
 
     @Test
@@ -157,7 +157,7 @@ public class CreateEventServletTest {
         when(req.getParameter("action")).thenReturn("update");
         when(req.getParameter("start")).thenReturn("incorrectDate");
         servlet.doPost(req, resp);
-        verify(resp).sendRedirect("stub/error");
+        verify(resp).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
 
     @Test
@@ -185,7 +185,7 @@ public class CreateEventServletTest {
         when(session.getAttribute("reports")).thenReturn(new ArrayList<>());
         when(eventService.createEvent(any(Event.class), any())).thenThrow(DaoException.class);
         servlet.doPost(req, resp);
-        verify(resp).sendRedirect("stub/error");
+        verify(resp).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
 
     private void createReport(int id) {

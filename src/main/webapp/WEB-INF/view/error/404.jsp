@@ -6,6 +6,6 @@
 <div class="d-flex justify-content-center align-items-center h-75 p-5">
     <div class="text-white-50 w-50 h-50 text-center">
         <div class="fs-1">404 <i class="bi bi-layout-wtf text-danger"></i></div>
-        <div class="fs-5"><fmt:message key="error.404.PageNotFound"/></div>
+        <div class="fs-5"><fmt:message key="error.404.title"/></div>
     </div>
 </div>

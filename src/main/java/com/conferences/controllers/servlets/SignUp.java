@@ -51,8 +51,10 @@ public class SignUp extends HttpServlet {
         String firstName = req.getParameter("first_name");
         String lastName = req.getParameter("last_name");
         String password = req.getParameter("password");
+        String locale = (String) req.getSession().getAttribute("locale");
+        locale = locale == null ? "en_US" : locale;
         try {
-            User user = userService.createUser(email, firstName, lastName, password);
+            User user = userService.createUser(email, firstName, lastName, password, locale);
             req.getSession().setAttribute("userId", user.getId());
             req.getSession().setAttribute("userName", user.getFirstName() + " " + user.getLastName());
             req.getSession().setAttribute("role", user.getRole());

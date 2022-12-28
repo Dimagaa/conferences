@@ -4,6 +4,11 @@
   E-mail: Di.mart.ap@gmail.com
 --%>
 <%@ page contentType="text/html;charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="locale" value="${sessionScope.locale == null ? pageContext.response.locale : sessionScope.locale}"/>
+<fmt:setLocale value="${locale}"/>
+<fmt:setBundle basename="lang"/>
 <html lang="en" data-contextPath="${pageContext.request.contextPath}">
 <head>
     <meta charset="UTF-8">
@@ -17,7 +22,7 @@
           crossorigin="anonymous"
           referrerpolicy="no-referrer"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-    <title>Page not found</title>
+    <title><fmt:message key="error.${requestScope['javax.servlet.error.status_code']}.title"/></title>
 </head>
 <body class="bg-body-dark d-flex flex-column min-vh-100">
 <div class="container-fluid p-0 d-flex flex-column min-vh-100">

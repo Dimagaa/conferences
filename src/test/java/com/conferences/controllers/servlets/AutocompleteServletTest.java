@@ -116,7 +116,7 @@ public class AutocompleteServletTest {
         when(req.getParameter("query")).thenReturn("test");
         when(eventService.getPlaces("%test%")).thenThrow(DaoException.class);
         servlet.doPost(req, resp);
-        verify(dispatcher, times(1)).forward(req, resp);
+        verify(resp).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
 
     private User createUser(String prefix, long id) {

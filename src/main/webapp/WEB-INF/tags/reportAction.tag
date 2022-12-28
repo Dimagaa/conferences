@@ -29,7 +29,7 @@
             <button type="button" class="btn btn-outline-dark btn-lg float-end"
             onclick="proposeSpeaker(${report.id})">
             <fmt:message key="report.button.proposeYourself"/>
-            <button>
+            </button>
         </c:if>
         <c:if test="${report.requested}">
             <button type="button"

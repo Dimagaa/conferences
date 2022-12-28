@@ -1,5 +1,6 @@
 package com.conferences.dao.impl.mysql;
 
+import com.conferences.model.ResetPasswordTokenInfo;
 import com.conferences.model.User;
 import com.conferences.dao.ConnectionManager;
 import com.conferences.dao.GenericDao;
@@ -78,7 +79,7 @@ public class MySQLUserDao extends GenericDao<User> implements UserDao {
         try {
             connection = connectionManager.getTransaction();
             long genId = add(connection,
-                    "INSERT INTO users(login, password, first_name, last_name, role) VALUES(?, ?, ?, ?, ?)",
+                    "INSERT INTO users(login, password, first_name, last_name, role, locale) VALUES(?, ?, ?, ?, ?, ?)",
                     user);
             connectionManager.commit(connection);
             user.setId(genId);
@@ -145,6 +146,82 @@ public class MySQLUserDao extends GenericDao<User> implements UserDao {
     }
 
     @Override
+    public boolean createToken(ResetPasswordTokenInfo tokenInfo) throws DaoException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = connectionManager.getConnection();
+            statement = connection.prepareStatement("INSERT IGNORE INTO password_reset_tokens(user_id, token, token_expiry) VALUES(?, ?, ?)");
+            statement.setLong(1, tokenInfo.getUserId());
+            statement.setString(2, tokenInfo.getToken());
+            statement.setLong(3, tokenInfo.getTokenExpiry());
+            return statement.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            closeResources(null, statement);
+            connectionManager.close(connection);
+        }
+    }
+
+    @Override
+    public ResetPasswordTokenInfo getTokenInfo(String token) throws DaoException {
+        ResetPasswordTokenInfo tokenInfo = new ResetPasswordTokenInfo();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+         try {
+             connection = connectionManager.getConnection();
+             statement = connection.prepareStatement("SELECT * FROM password_reset_tokens WHERE token = ?");
+             statement.setString(1, token);
+             resultSet = statement.executeQuery();
+             while (resultSet.next()) {
+                 tokenInfo.setUserId(resultSet.getLong("user_id"));
+                 tokenInfo.setToken(resultSet.getString("token"));
+                 tokenInfo.setTokenExpiry(resultSet.getLong("token_expiry"));
+             }
+             return tokenInfo;
+         } catch (SQLException e) {
+             throw new DaoException("A database access error occurs", e);
+         } finally {
+             closeResources(resultSet, statement);
+             connectionManager.close(connection);
+         }
+    }
+
+    @Override
+    public boolean resetPassword(long userId, String password) throws DaoException {
+        Connection connection = null;
+        try {
+            connection = connectionManager.getTransaction();
+            return updateByField(connection, "UPDATE users SET password=? WHERE id=?", password, userId) && deleteAllPasswordResetTokensForUser(connection, userId);
+        } catch (SQLException e) {
+            throw new DaoException("A database access error occurs", e);
+        } finally {
+            connectionManager.commit(connection);
+            connectionManager.close(connection);
+        }
+    }
+
+    @Override
+    public boolean setLocale(long userId, String locale) throws DaoException {
+        Connection connection = null;
+        try {
+            connection = connectionManager.getConnection();
+            return updateByField(connection, "UPDATE users SET locale=? WHERE id=?", locale, userId);
+        } finally {
+            connectionManager.close(connection);
+        }
+    }
+
+    private boolean deleteAllPasswordResetTokensForUser(Connection connection, long userId) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM password_reset_tokens WHERE user_id=?");
+        statement.setLong(1, userId);
+        return statement.executeUpdate() > 0;
+    }
+
+    @Override
     protected User getEntity(ResultSet rs) throws SQLException {
         User user = new User();
         user.setId(rs.getLong("id"));
@@ -153,6 +230,7 @@ public class MySQLUserDao extends GenericDao<User> implements UserDao {
         user.setFirstName(rs.getString("first_name"));
         user.setLastName(rs.getString("last_name"));
         user.setRole(User.Role.valueOf(rs.getString("role")));
+        user.setLocale(rs.getString("locale"));
         return user;
     }
 
@@ -163,5 +241,6 @@ public class MySQLUserDao extends GenericDao<User> implements UserDao {
         statement.setString(3, user.getFirstName());
         statement.setString(4, user.getLastName());
         statement.setString(5, user.getRole().name());
+        statement.setString(6, user.getLocale());
     }
 }

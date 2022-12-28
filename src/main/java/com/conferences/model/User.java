@@ -10,6 +10,7 @@ public class User implements Serializable {
     private String firstName;
     private String lastName;
     private Role role;
+    private String locale;
 
 
 
@@ -59,6 +60,14 @@ public class User implements Serializable {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 
     @Override

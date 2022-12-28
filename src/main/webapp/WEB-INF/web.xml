@@ -115,11 +115,27 @@
         <servlet-name>Locale</servlet-name>
         <url-pattern>/locale</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>ForgotPassword</servlet-name>
+        <servlet-class>com.conferences.controllers.servlets.ForgotPassword</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ForgotPassword</servlet-name>
+        <url-pattern>/forgot</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ResetPassword</servlet-name>
+        <servlet-class>com.conferences.controllers.servlets.ResetPassword</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ResetPassword</servlet-name>
+        <url-pattern>/reset</url-pattern>
+    </servlet-mapping>
     <!-- Error page -->
     <error-page>
         <location>/WEB-INF/view/error/errorPage.jsp</location>
     </error-page>
-    <!-- Authentication filter -->
+    <!-- Filters -->
     <filter>
         <filter-name>Encoding</filter-name>
         <filter-class>com.conferences.controllers.filters.EncodingFilter</filter-class>
@@ -133,7 +149,7 @@
         <filter-class>com.conferences.controllers.filters.AuthFilter</filter-class>
         <init-param>
             <param-name>excludedUrls</param-name>
-            <param-value>/login,/signup,/css/style.css,/js/scripts.js,/locale</param-value>
+            <param-value>/login,/signup,/css/style.css,/css/success-checkmark.css,/js/scripts.js,/locale,/forgot,/reset</param-value>
         </init-param>
     </filter>
     <filter-mapping>

@@ -50,19 +50,21 @@ public class Login extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        UserService userService = (UserService) req.getServletContext().getAttribute("user_service");
+        UserService userService = (UserService) getServletContext().getAttribute("user_service");
         JsonObjectBuilder respBuilder = Json.createObjectBuilder();
 
         HttpSession session = req.getSession();
         String login = req.getParameter("login");
         String password = req.getParameter("password");
+        String locale = (String) req.getSession().getAttribute("locale");
         try {
-            Optional<User> opUser = Optional.ofNullable(userService.authenticatedUser(login, password));
+            Optional<User> opUser = Optional.ofNullable(userService.authenticateUser(login, password));
             if(opUser.isPresent()) {
                 User user =  opUser.get();
                 session.setAttribute("userId", user.getId());
                 session.setAttribute("userName", user.getFirstName() + " " + user.getLastName());
                 session.setAttribute("role", user.getRole());
+                session.setAttribute("locale", locale == null ? user.getLocale() : locale);
                 respBuilder.add("redirect", req.getContextPath() + "/events");
                 doResponse(resp, respBuilder.build());
                 return;

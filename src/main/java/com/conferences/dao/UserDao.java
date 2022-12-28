@@ -1,6 +1,7 @@
 package com.conferences.dao;
 
 import com.conferences.exceptions.DaoException;
+import com.conferences.model.ResetPasswordTokenInfo;
 import com.conferences.model.User;
 
 import java.util.List;
@@ -82,4 +83,9 @@ public interface UserDao {
      * @throws DaoException if a database access error occurs
      */
     List<User> findProposedSpeaker(long reportId) throws DaoException;
+
+    boolean createToken(ResetPasswordTokenInfo tokenInfo) throws DaoException;
+    ResetPasswordTokenInfo getTokenInfo(String token) throws DaoException;
+    boolean resetPassword(long userId, String password) throws DaoException;
+    boolean setLocale(long userId, String locale) throws DaoException;
 }

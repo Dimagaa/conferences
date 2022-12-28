@@ -13,7 +13,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -34,7 +33,6 @@ public class EventsActionServletTest {
 
     private final EventService eventService = mock(EventService.class);
     private final EventsAction servlet = spy(EventsAction.class);
-    private final String contextPath = "stub";
 
     @BeforeEach
     public void setUp() throws ServletException, IOException {
@@ -44,6 +42,7 @@ public class EventsActionServletTest {
         when(req.getParameter("eventId")).thenReturn("1");
         when(req.getRequestDispatcher(anyString())).thenReturn(dispatcher);
         doNothing().when(dispatcher).forward(req, resp);
+        String contextPath = "stub";
         when(req.getContextPath()).thenReturn(contextPath);
     }
 
@@ -61,7 +60,7 @@ public class EventsActionServletTest {
     public void testDoGetWithDaoException() throws DaoException, ServletException, IOException {
         when(eventService.getPreparedReports(anyLong())).thenThrow(DaoException.class);
         servlet.doGet(req, resp);
-        verify(req).getRequestDispatcher(contextPath + "/error");
+        verify(resp).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
 
     @Test
@@ -97,7 +96,7 @@ public class EventsActionServletTest {
         when(req.getParameter("action")).thenReturn("save");
         when(req.getParameter("start")).thenReturn("InvalidDate");
         servlet.doPost(req, resp);
-        verify(resp).setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        verify(resp).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
 
     @Test

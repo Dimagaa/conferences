@@ -37,7 +37,6 @@ public class EventsServletTest {
     private final Page page = new Page(1);
     private final EventService eventService = mock(EventService.class);
     private final Events servlet = spy(Events.class);
-    private final String contextPath = "stub";
 
     @BeforeEach
     public void setUp() {
@@ -45,6 +44,7 @@ public class EventsServletTest {
         when(servlet.getServletContext()).thenReturn(servletContext);
         when(req.getSession()).thenReturn(session);
 
+        String contextPath = "stub";
         when(req.getContextPath()).thenReturn(contextPath);
         when(servletContext.getAttribute("event_service")).thenReturn(eventService);
         when(session.getAttribute("page")).thenReturn(page);
@@ -133,7 +133,7 @@ public class EventsServletTest {
     public void doGetWithDaoException() throws DaoException, ServletException, IOException {
         when(eventService.getPreparedEvents(any(), any(), anyLong())).thenThrow(DaoException.class);
         servlet.doGet(req, resp);
-        verify(req).getRequestDispatcher(contextPath + "/error");
+        verify(resp).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
 
     @Test
