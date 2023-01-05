@@ -77,7 +77,7 @@ public class CreateEvent extends HttpServlet {
         String action = req.getParameter("action");
         logger.debug(action);
         if(actions.get(action).apply(req)){
-            resp.sendRedirect(req.getContextPath() + ("/events/create"));
+            resp.sendRedirect(req.getContextPath() + ("/events/developing"));
             return;
         }
         resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

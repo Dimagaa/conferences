@@ -69,7 +69,7 @@ const changeReportModalShow = (repEl, modal, repId) => {
     $(modal).modal('show');
 }
 
-const doEventAction = (url, action, data) => {
+const     doEventAction = (url, action, data) => {
     $.ajax({
         url: url,
         type: 'POST',

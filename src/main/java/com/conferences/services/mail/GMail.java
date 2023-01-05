@@ -12,7 +12,6 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.Message;
-import org.apache.commons.codec.binary.Base64;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -75,9 +74,7 @@ public class GMail {
             GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(jsonFactory, new InputStreamReader(is));
             GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(httpTransport, jsonFactory, clientSecrets, Set.of(GMAIL_SEND)).setDataStoreFactory(new FileDataStoreFactory(Paths.get("tokens").toFile())).setAccessType("offline").build();
             LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(-1).build();
-            Credential credential = new AuthorizationCodeInstalledApp(flow, receiver).authorize("me");
-
-            return credential;
+            return new AuthorizationCodeInstalledApp(flow, receiver).authorize("me");
         }
     }
 }

@@ -16,9 +16,7 @@ public class RequestListener implements ServletRequestListener {
     @Override
     public void requestInitialized(ServletRequestEvent sre) {
         HttpServletRequest req = (HttpServletRequest) sre.getServletRequest();
-
         logger.info(String.format("Initial request: %s : %s", req.getServletPath(), req.getMethod()));
-
     }
 
     @Override
