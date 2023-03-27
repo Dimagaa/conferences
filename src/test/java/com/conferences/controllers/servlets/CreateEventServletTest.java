@@ -110,7 +110,7 @@ public class CreateEventServletTest {
             createReport(i);
             servlet.doPost(req, resp);
         }
-        verify(resp, times(5)).sendRedirect("stub/events/create");
+        verify(resp, times(5)).sendRedirect("stub/events/developing");
         assertEquals(5, reports.size());
     }
 
@@ -171,7 +171,7 @@ public class CreateEventServletTest {
         when(session.getAttribute("reports")).thenReturn(new ArrayList<>());
         when(eventService.createEvent(any(Event.class), any())).thenReturn(true);
         servlet.doPost(req, resp);
-        verify(resp).sendRedirect("stub/events/create");
+        verify(resp).sendRedirect("stub/events/developing");
     }
 
     @Test
